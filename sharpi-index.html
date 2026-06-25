@@ -1,0 +1,3123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SHARPI Predictor</title>
+  <style>
+    /* ============================================================
+       ORIGINAL STYLES (PRESERVED)
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #root {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       DYNAMIC STARS BG (TWINKLING FIXED)
+       ============================================================ */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #stars {
+      width: 1px;
+      height: 1px;
+      background: transparent;
+      animation: twinkle 4s ease-in-out infinite alternate;
+      box-shadow: 501px 811px #fff, 1450px 1324px #fff, 1093px 1780px #fff, 1469px 678px #fff, 904px 741px #fff, 1160px 781px #fff, 1841px 1962px #fff, 1630px 1667px #fff, 1788px 676px #fff, 367px 1734px #fff, 1343px 156px #fff, 1283px 1142px #fff, 1062px 378px #fff, 1395px 467px #fff, 1017px 1891px #fff, 137px 1114px #fff, 1767px 1403px #fff, 1543px 11px #fff, 1078px 181px #fff, 1189px 1574px #fff, 1697px 1551px #fff, 439px 472px #fff, 1491px 677px #fff, 1364px 599px #fff, 34px 382px #fff, 1221px 1584px #fff, 1266px 1499px #fff, 169px 1907px #fff, 1219px 1125px #fff, 659px 18px #fff, 1731px 1959px #fff, 332px 1216px #fff, 1913px 788px #fff, 80px 712px #fff, 326px 1605px #fff, 574px 1502px #fff, 473px 1653px #fff, 404px 975px #fff, 322px 1797px #fff, 425px 1321px #fff, 1121px 1797px #fff, 731px 647px #fff, 891px 1584px #fff, 1523px 109px #fff, 1379px 244px #fff, 865px 1064px #fff, 493px 956px #fff, 624px 1380px #fff, 440px 619px #fff, 1630px 767px #fff, 955px 1196px #fff, 62px 729px #fff, 126px 946px #fff, 1256px 896px #fff, 1444px 256px #fff, 661px 1628px #fff, 1078px 1716px #fff, 300px 737px #fff, 1734px 413px #fff, 1296px 129px #fff, 1771px 1678px #fff, 977px 1764px #fff, 1879px 549px #fff, 665px 1531px #fff, 89px 701px #fff, 1084px 1183px #fff, 1597px 1576px #fff, 1354px 1774px #fff, 554px 1471px #fff, 1469px 287px #fff, 887px 106px #fff, 1962px 766px #fff, 638px 805px #fff, 1651px 741px #fff, 1517px 1826px #fff, 24px 1152px #fff, 507px 558px #fff, 1262px 652px #fff, 246px 1048px #fff, 1077px 421px #fff, 1866px 1847px #fff, 1986px 1561px #fff, 704px 632px #fff, 1991px 1875px #fff, 1227px 395px #fff, 45px 1116px #fff, 247px 786px #fff, 890px 607px #fff, 787px 1235px #fff, 557px 524px #fff, 1582px 1285px #fff, 1725px 1366px #fff, 952px 747px #fff, 251px 458px #fff, 1500px 1250px #fff, 1999px 1734px #fff, 1336px 1955px #fff, 1705px 1464px #fff, 728px 697px #fff, 594px 510px #fff, 1345px 1990px #fff, 1919px 1803px #fff, 1117px 966px #fff, 1629px 97px #fff, 1046px 1196px #fff, 810px 1092px #fff, 722px 976px #fff, 406px 18px #fff, 1665px 1860px #fff, 1758px 1628px #fff, 1183px 463px #fff, 564px 239px #fff, 13px 1767px #fff, 1482px 1472px #fff, 1700px 347px #fff, 1362px 244px #fff, 1141px 1708px #fff, 22px 885px #fff, 374px 1309px #fff, 1034px 1037px #fff, 1725px 1086px #fff, 1343px 1921px #fff, 596px 903px #fff, 1061px 478px #fff, 18px 1409px #fff, 729px 1364px #fff, 264px 911px #fff, 677px 1442px #fff, 123px 33px #fff, 1303px 646px #fff, 1945px 792px #fff, 1305px 938px #fff, 918px 1536px #fff, 620px 948px #fff, 183px 646px #fff, 695px 687px #fff, 881px 272px #fff, 1521px 1212px #fff, 1423px 1022px #fff, 1545px 1271px #fff, 1393px 348px #fff, 685px 1910px #fff, 1446px 856px #fff, 73px 1201px #fff, 736px 999px #fff, 673px 796px #fff, 469px 850px #fff, 1912px 142px #fff, 1278px 664px #fff, 184px 1990px #fff, 1173px 1312px #fff, 782px 1879px #fff, 323px 1035px #fff, 611px 908px #fff, 565px 1449px #fff, 748px 1713px #fff, 1047px 490px #fff, 1040px 1872px #fff, 1818px 1659px #fff, 1806px 1327px #fff, 386px 575px #fff, 1550px 463px #fff, 148px 687px #fff, 651px 1683px #fff, 1588px 1194px #fff, 1831px 2px #fff, 581px 876px #fff, 1396px 1743px #fff, 1212px 1810px #fff, 421px 1920px #fff, 658px 1461px #fff, 1859px 1809px #fff, 1456px 388px #fff, 186px 1627px #fff, 1528px 1145px #fff, 171px 97px #fff, 674px 1072px #fff, 676px 1052px #fff, 1165px 1131px #fff, 1088px 781px #fff, 1231px 948px #fff, 330px 257px #fff, 426px 1046px #fff, 549px 652px #fff, 1338px 74px #fff, 1749px 364px #fff, 931px 369px #fff, 383px 1428px #fff, 1558px 389px #fff, 927px 133px #fff, 234px 1888px #fff, 1785px 1617px #fff, 556px 643px #fff, 401px 275px #fff, 406px 1644px #fff, 1253px 1852px #fff, 1599px 883px #fff, 744px 1721px #fff, 524px 1297px #fff, 1226px 1177px #fff, 1679px 55px #fff, 874px 1811px #fff, 838px 790px #fff, 1241px 430px #fff, 1676px 652px #fff, 1191px 568px #fff, 53px 1990px #fff, 1163px 237px #fff, 61px 223px #fff, 592px 456px #fff, 1844px 271px #fff, 1324px 1488px #fff, 1373px 717px #fff, 1822px 709px #fff, 1464px 941px #fff, 1445px 1118px #fff, 991px 1414px #fff, 1964px 1076px #fff, 108px 172px #fff, 641px 1722px #fff, 1539px 427px #fff, 1697px 45px #fff, 1301px 1353px #fff, 1060px 329px #fff, 967px 1396px #fff, 493px 301px #fff, 1228px 1406px #fff, 1211px 1653px #fff, 444px 1822px #fff, 1746px 353px #fff, 1449px 381px #fff, 671px 887px #fff, 650px 138px #fff, 30px 1839px #fff, 1094px 1405px #fff, 273px 796px #fff, 1618px 1964px #fff, 1045px 1849px #fff, 1472px 1155px #fff, 1529px 1312px #fff, 728px 448px #fff, 44px 1908px #fff, 691px 818px #fff, 254px 293px #fff, 1981px 1133px #fff, 1307px 375px #fff, 196px 316px #fff, 1241px 1975px #fff, 1138px 1706px #fff, 1769px 463px #fff, 1768px 1428px #fff, 1730px 590px #fff, 1780px 523px #fff, 1862px 1526px #fff, 1613px 909px #fff, 1266px 1781px #fff, 470px 352px #fff, 699px 1682px #fff, 1002px 614px #fff, 1209px 133px #fff, 1842px 518px #fff, 1422px 1836px #fff, 1720px 1901px #fff, 470px 1788px #fff, 1355px 1387px #fff, 146px 1162px #fff, 933px 80px #fff, 681px 1063px #fff, 313px 1341px #fff, 740px 1498px #fff, 168px 1014px #fff, 345px 1355px #fff, 1498px 1562px #fff, 1626px 1358px #fff, 890px 403px #fff, 663px 562px #fff, 1481px 168px #fff, 22px 719px #fff, 774px 1041px #fff, 1899px 829px #fff, 430px 158px #fff, 430px 361px #fff, 1592px 1334px #fff, 224px 323px #fff, 1639px 1131px #fff, 7px 271px #fff, 1646px 1514px #fff, 1605px 1444px #fff, 1820px 1665px #fff, 1549px 1641px #fff, 1609px 1377px #fff, 486px 1098px #fff, 229px 613px #fff, 542px 1694px #fff, 318px 256px #fff, 1861px 918px #fff, 889px 892px #fff, 442px 1524px #fff, 19px 422px #fff, 1935px 1908px #fff, 828px 109px #fff, 862px 1248px #fff, 1275px 560px #fff, 906px 63px #fff, 337px 1605px #fff, 1691px 918px #fff, 1414px 679px #fff, 1726px 749px #fff, 1540px 1149px #fff, 1337px 1466px #fff, 446px 430px #fff, 676px 1616px #fff, 840px 326px #fff, 976px 977px #fff, 1840px 642px #fff, 1273px 804px #fff, 1071px 928px #fff, 1292px 1675px #fff, 29px 1148px #fff, 1585px 135px #fff, 1007px 563px #fff, 1035px 78px #fff, 1174px 574px #fff, 120px 1304px #fff, 845px 1292px #fff, 861px 540px #fff, 234px 232px #fff, 1940px 1367px #fff, 759px 639px #fff, 1775px 1381px #fff, 906px 372px #fff, 1104px 1165px #fff, 1524px 911px #fff, 1882px 330px #fff, 1389px 700px #fff, 300px 1629px #fff, 220px 1614px #fff, 563px 140px #fff, 1611px 1586px #fff, 793px 1316px #fff, 325px 1070px #fff, 1722px 1462px #fff, 1406px 1120px #fff, 1169px 1768px #fff, 1956px 1053px #fff, 959px 1587px #fff, 585px 1566px #fff, 370px 204px #fff, 1606px 1416px #fff, 443px 1606px #fff, 1499px 1102px #fff, 1943px 105px #fff, 1121px 1594px #fff, 1512px 32px #fff, 871px 1425px #fff, 433px 100px #fff, 294px 1471px #fff, 1688px 1755px #fff, 1666px 591px #fff, 1034px 300px #fff, 734px 1178px #fff, 1342px 313px #fff, 1616px 1590px #fff, 1763px 1472px #fff, 632px 1935px #fff, 1708px 872px #fff, 1871px 915px #fff, 1829px 1020px #fff, 1599px 578px #fff, 42px 585px #fff, 1163px 1382px #fff, 1744px 1272px #fff, 984px 1426px #fff, 1786px 1584px #fff, 1813px 379px #fff, 1867px 1127px #fff, 97px 567px #fff, 626px 988px #fff, 1178px 79px #fff, 1703px 211px #fff, 961px 1785px #fff, 110px 975px #fff, 953px 1941px #fff, 1027px 1790px #fff, 1665px 107px #fff, 11px 964px #fff, 1718px 1147px #fff, 21px 1728px #fff, 1358px 1922px #fff, 872px 65px #fff, 1191px 1635px #fff, 762px 681px #fff, 1519px 1033px #fff, 906px 566px #fff, 1074px 657px #fff, 1093px 415px #fff, 51px 198px #fff, 1075px 1418px #fff, 1547px 1070px #fff, 225px 920px #fff, 850px 1974px #fff, 981px 595px #fff, 1425px 131px #fff, 460px 917px #fff, 56px 495px #fff, 714px 428px #fff, 920px 493px #fff, 470px 1521px #fff, 532px 821px #fff, 1905px 71px #fff, 883px 1501px #fff, 294px 196px #fff, 381px 1999px #fff, 332px 793px #fff, 1246px 408px #fff, 233px 149px #fff, 315px 231px #fff, 1594px 1302px #fff, 696px 1585px #fff, 791px 136px #fff, 479px 199px #fff, 1627px 1413px #fff, 1824px 924px #fff, 1631px 342px #fff, 1251px 1151px #fff, 284px 1781px #fff, 497px 1052px #fff, 204px 1161px #fff, 646px 1499px #fff, 1762px 558px #fff, 854px 1833px #fff, 883px 945px #fff, 44px 982px #fff, 1101px 834px #fff, 515px 1748px #fff, 1578px 1435px #fff, 819px 1258px #fff, 776px 670px #fff, 115px 385px #fff, 1478px 434px #fff, 885px 20px #fff, 192px 1513px #fff, 78px 1129px #fff, 1774px 1105px #fff, 955px 1149px #fff, 1817px 1929px #fff, 1106px 1832px #fff, 1107px 1997px #fff, 94px 23px #fff, 243px 982px #fff, 43px 1972px #fff, 1798px 673px #fff, 1131px 1589px #fff, 841px 14px #fff, 826px 345px #fff, 687px 56px #fff, 1084px 32px #fff, 1887px 1878px #fff, 153px 526px #fff, 1828px 253px #fff, 1947px 1105px #fff, 886px 700px #fff, 1307px 1723px #fff, 1274px 651px #fff, 1530px 837px #fff, 1699px 1637px #fff, 1703px 1331px #fff, 1929px 1557px #fff, 1763px 737px #fff, 1118px 1680px #fff, 1545px 692px #fff, 1462px 1092px #fff, 208px 1667px #fff, 1393px 859px #fff, 186px 1794px #fff, 351px 1199px #fff, 642px 1995px #fff, 1061px 1726px #fff, 1708px 115px #fff, 1233px 1305px #fff, 637px 1786px #fff, 1730px 603px #fff, 75px 1240px #fff, 1704px 1326px #fff, 584px 346px #fff, 438px 1554px #fff, 561px 513px #fff, 1382px 225px #fff, 467px 1674px #fff, 1403px 815px #fff, 1546px 1835px #fff, 127px 1119px #fff, 276px 591px #fff, 688px 1458px #fff, 765px 646px #fff, 474px 984px #fff, 171px 361px #fff, 94px 1480px #fff, 1962px 1666px #fff, 909px 1037px #fff, 1725px 222px #fff, 253px 1355px #fff, 1892px 1901px #fff, 275px 1847px #fff, 28px 1184px #fff, 1725px 1382px #fff, 882px 647px #fff, 1935px 1046px #fff, 10px 344px #fff, 292px 1328px #fff, 127px 1352px #fff, 752px 929px #fff, 1589px 384px #fff, 284px 1829px #fff, 381px 820px #fff, 1229px 1125px #fff, 777px 429px #fff, 1811px 1499px #fff, 1573px 287px #fff, 295px 756px #fff, 389px 616px #fff, 781px 41px #fff, 1092px 333px #fff, 794px 1588px #fff, 386px 1847px #fff, 1802px 710px #fff, 662px 60px #fff, 640px 264px #fff, 463px 746px #fff, 1859px 799px #fff, 763px 37px #fff, 639px 396px #fff, 357px 1071px #fff, 1190px 1430px #fff, 1814px 257px #fff, 1382px 235px #fff, 606px 1304px #fff, 1939px 1470px #fff, 1124px 349px #fff, 307px 1567px #fff, 310px 1323px #fff, 1145px 922px #fff, 1196px 1922px #fff, 1647px 544px #fff, 788px 1337px #fff, 257px 632px #fff, 1413px 414px #fff, 590px 620px #fff, 582px 794px #fff, 1702px 1481px #fff, 1055px 53px #fff, 157px 346px #fff, 50px 1901px #fff, 1038px 1369px #fff, 796px 1941px #fff, 215px 194px #fff, 1567px 1538px #fff, 367px 800px #fff, 1044px 489px #fff, 1109px 1712px #fff, 524px 327px #fff, 525px 1252px #fff, 1475px 1240px #fff, 529px 436px #fff, 795px 834px #fff, 122px 1371px #fff, 79px 482px #fff, 520px 1249px #fff, 336px 1878px #fff, 188px 944px #fff, 325px 1259px #fff, 1491px 1942px #fff, 620px 1054px #fff, 1606px 1153px #fff, 1448px 502px #fff, 53px 1381px #fff, 107px 1670px #fff, 1380px 618px #fff, 967px 1557px #fff, 1116px 1722px #fff, 1174px 1044px #fff, 1805px 717px #fff, 663px 394px #fff, 1848px 1007px #fff, 389px 802px #fff, 49px 392px #fff, 1650px 852px #fff, 1678px 1012px #fff, 335px 1009px #fff, 1818px 1631px #fff, 1568px 742px #fff, 1162px 1991px #fff, 52px 1190px #fff, 1401px 928px #fff, 119px 1549px #fff, 537px 1529px #fff, 2px 1709px #fff, 122px 387px #fff, 543px 2px #fff, 27px 1971px #fff, 507px 1377px #fff, 1362px 1080px #fff, 1031px 1544px #fff, 1631px 1174px #fff, 1603px 312px #fff, 1626px 1422px #fff, 1430px 615px #fff, 1958px 1431px #fff, 1946px 1412px #fff, 1848px 247px #fff, 984px 1808px #fff, 1396px 225px #fff, 319px 717px #fff, 1252px 875px #fff, 1619px 156px #fff, 951px 1971px #fff, 386px 355px #fff, 1406px 1151px #fff, 273px 1538px #fff, 844px 1570px #fff, 947px 151px #fff, 1363px 525px #fff, 209px 307px #fff, 1923px 1718px #fff, 993px 1741px #fff, 1513px 353px #fff, 1353px 61px #fff, 664px 352px #fff, 1382px 359px #fff, 1487px 1707px #fff, 657px 1045px #fff, 1107px 490px #fff, 1834px 1176px #fff, 837px 1438px #fff, 1947px 448px #fff, 1196px 333px #fff, 151px 555px #fff, 18px 992px #fff, 458px 748px #fff, 1801px 890px #fff, 1093px 1012px #fff, 315px 1101px #fff, 194px 323px #fff, 754px 292px #fff, 1737px 7px #fff, 40px 840px #fff, 1170px 805px #fff, 176px 1753px #fff, 805px 1148px #fff, 1578px 1271px #fff, 367px 1494px #fff, 363px 1111px #fff, 1955px 243px #fff, 1451px 1093px #fff, 375px 617px #fff, 1223px 720px #fff, 1178px 13px #fff, 1456px 865px #fff, 1440px 49px #fff, 186px 1569px #fff, 320px 1853px #fff, 300px 539px #fff, 1559px 509px #fff, 1985px 1108px #fff, 1588px 828px #fff, 525px 1432px #fff, 831px 363px #fff, 141px 281px #fff, 1319px 402px #fff, 40px 456px #fff, 1955px 478px #fff, 1758px 818px #fff, 1924px 688px #fff, 1030px 953px #fff, 1982px 210px #fff, 917px 1401px #fff, 1051px 1837px #fff, 1045px 463px #fff, 1744px 573px #fff, 529px 1530px #fff, 542px 469px #fff, 1982px 324px #fff, 1902px 1422px #fff, 1968px 782px #fff, 1666px 1561px #fff, 955px 304px #fff, 323px 778px #fff, 272px 443px #fff, 485px 581px #fff, 1353px 1058px #fff, 1257px 131px #fff, 434px 98px #fff, 1587px 1953px #fff, 1749px 68px #fff, 1984px 839px #fff, 1518px 183px #fff, 1071px 855px #fff, 1662px 1994px #fff, 1111px 106px #fff, 1954px 838px #fff;
+    }
+
+    #stars2 {
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      animation: twinkle2 6s ease-in-out infinite alternate;
+      box-shadow: 1925px 1320px #fff, 693px 1778px #fff, 1016px 711px #fff, 1171px 563px #fff, 661px 1919px #fff, 1610px 44px #fff, 1275px 140px #fff, 1208px 1802px #fff, 1473px 1587px #fff, 11px 111px #fff;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes twinkle2 {
+      0% { opacity: 0.5; }
+      100% { opacity: 0.9; }
+    }
+
+    /* ============================================================
+       GHOST LOADER (YOUR EXACT CODE)
+       ============================================================ */
+    #ghost {
+      position: relative;
+      scale: 0.6;
+    }
+
+    #red {
+      animation: upNDown infinite 0.5s;
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-rows: repeat(14, 1fr);
+      grid-column-gap: 0px;
+      grid-row-gap: 0px;
+      grid-template-areas:
+        "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
+        "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
+        "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
+        "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
+        "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
+        "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
+        "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
+    }
+
+    @keyframes upNDown {
+      0%, 49% { transform: translateY(0px); }
+      50%, 100% { transform: translateY(-10px); }
+    }
+
+    #top0, #top1, #top2, #top3, #top4, #st0, #st1, #st2, #st3, #st4, #st5 {
+      background-color: red;
+    }
+
+    #top0 { grid-area: top0; }
+    #top1 { grid-area: top1; }
+    #top2 { grid-area: top2; }
+    #top3 { grid-area: top3; }
+    #top4 { grid-area: top4; }
+    #st0 { grid-area: st0; }
+    #st1 { grid-area: st1; }
+    #st2 { grid-area: st2; }
+    #st3 { grid-area: st3; }
+    #st4 { grid-area: st4; }
+    #st5 { grid-area: st5; }
+
+    #an1 { grid-area: an1; animation: flicker0 infinite 0.5s; }
+    #an18 { grid-area: an18; animation: flicker0 infinite 0.5s; }
+    #an2 { grid-area: an2; animation: flicker1 infinite 0.5s; }
+    #an17 { grid-area: an17; animation: flicker1 infinite 0.5s; }
+    #an3 { grid-area: an3; animation: flicker1 infinite 0.5s; }
+    #an16 { grid-area: an16; animation: flicker1 infinite 0.5s; }
+    #an4 { grid-area: an4; animation: flicker1 infinite 0.5s; }
+    #an15 { grid-area: an15; animation: flicker1 infinite 0.5s; }
+    #an6 { grid-area: an6; animation: flicker0 infinite 0.5s; }
+    #an12 { grid-area: an12; animation: flicker0 infinite 0.5s; }
+    #an7 { grid-area: an7; animation: flicker0 infinite 0.5s; }
+    #an13 { grid-area: an13; animation: flicker0 infinite 0.5s; }
+    #an9 { grid-area: an9; animation: flicker1 infinite 0.5s; }
+    #an10 { grid-area: an10; animation: flicker1 infinite 0.5s; }
+    #an8 { grid-area: an8; animation: flicker0 infinite 0.5s; }
+    #an11 { grid-area: an11; animation: flicker0 infinite 0.5s; }
+
+    @keyframes flicker0 {
+      0%, 49% { background-color: red; }
+      50%, 100% { background-color: transparent; }
+    }
+
+    @keyframes flicker1 {
+      0%, 49% { background-color: transparent; }
+      50%, 100% { background-color: red; }
+    }
+
+    #eye {
+      width: 40px;
+      height: 50px;
+      position: absolute;
+      top: 30px;
+      left: 10px;
+    }
+
+    #eye::before {
+      content: "";
+      background-color: white;
+      width: 20px;
+      height: 50px;
+      transform: translateX(10px);
+      display: block;
+      position: absolute;
+    }
+
+    #eye::after {
+      content: "";
+      background-color: white;
+      width: 40px;
+      height: 30px;
+      transform: translateY(10px);
+      display: block;
+      position: absolute;
+    }
+
+    #eye1 {
+      width: 40px;
+      height: 50px;
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
+
+    #eye1::before {
+      content: "";
+      background-color: white;
+      width: 20px;
+      height: 50px;
+      transform: translateX(10px);
+      display: block;
+      position: absolute;
+    }
+
+    #eye1::after {
+      content: "";
+      background-color: white;
+      width: 40px;
+      height: 30px;
+      transform: translateY(10px);
+      display: block;
+      position: absolute;
+    }
+
+    #pupil {
+      width: 20px;
+      height: 20px;
+      background-color: blue;
+      position: absolute;
+      top: 50px;
+      left: 10px;
+      z-index: 1;
+      animation: eyesMovement infinite 3s;
+    }
+
+    #pupil1 {
+      width: 20px;
+      height: 20px;
+      background-color: blue;
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      z-index: 1;
+      animation: eyesMovement infinite 3s;
+    }
+
+    @keyframes eyesMovement {
+      0%, 49% { transform: translateX(0px); }
+      50%, 99% { transform: translateX(10px); }
+      100% { transform: translateX(0px); }
+    }
+
+    #shadow {
+      background-color: black;
+      width: 140px;
+      height: 140px;
+      position: absolute;
+      border-radius: 50%;
+      transform: rotateX(80deg);
+      filter: blur(20px);
+      top: 80%;
+      animation: shadowMovement infinite 0.5s;
+    }
+
+    @keyframes shadowMovement {
+      0%, 49% { opacity: 0.5; }
+      50%, 100% { opacity: 0.2; }
+    }
+
+    .ghost-loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .loader-text {
+      color: #ff6666;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ============================================================
+       ORIGINAL APP STYLES (PRESERVED)
+       ============================================================ */
+    .page-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .page-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 100px;
+    }
+
+    .page-scroll::-webkit-scrollbar {
+      width: 3px;
+    }
+    .page-scroll::-webkit-scrollbar-track {
+      background: #1a0a0a;
+    }
+    .page-scroll::-webkit-scrollbar-thumb {
+      background: #ff3333;
+      border-radius: 10px;
+    }
+
+    .page {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    .header {
+      background: rgba(26, 10, 10, 0.92);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ff3333;
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+
+    .logo-placeholder {
+      width: 60px;
+      height: 60px;
+      background: #ff3333;
+      border-radius: 30px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .sharpi-text {
+      color: #ff3333;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .panel {
+      background: rgba(26, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      margin: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #ff3333;
+    }
+
+    .panel-text {
+      color: white;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .image-placeholder {
+      height: 250px;
+      margin: 15px;
+      border-radius: 10px;
+      border: 1px solid #ff3333;
+      background: rgba(42, 26, 26, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #ff6666;
+      overflow: hidden;
+    }
+
+    .image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .footer {
+      background: rgba(26, 10, 10, 0.92);
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #ff3333;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      color: #888;
+      font-size: 10px;
+    }
+
+    .disclaimer {
+      color: #666;
+      font-size: 8px;
+      margin-top: 5px;
+    }
+
+    .floating-button {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 100;
+    }
+
+    .floating-button.visible {
+      opacity: 1;
+    }
+
+    .get-started-btn {
+      background: #00cc44;
+      padding: 12px 25px;
+      border-radius: 30px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 204, 68, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .get-started-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ============================================================
+       DASHBOARD STYLES
+       ============================================================ */
+    .dashboard-header {
+      background: rgba(26, 10, 10, 0.92);
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ff3333;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .back-btn {
+      color: #ff3333;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 5px;
+      background: none;
+      border: none;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .menu-btn {
+      color: #ff3333;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 5px;
+      background: none;
+      border: none;
+      min-width: 44px;
+      min-height: 44px;
+      font-weight: bold;
+    }
+
+    .animation-placeholder {
+      background: rgba(42, 26, 26, 0.85);
+      height: 100px;
+      margin: 10px;
+      border-radius: 8px;
+      border: 1px solid #ff3333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff6666;
+      flex-shrink: 0;
+    }
+
+    .dashboard-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 15px 20px 80px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .session-text {
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    .circle-placeholder {
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      background: rgba(42, 26, 26, 0.85);
+      border: 8px solid #ff3333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .circle-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .multiplier-text {
+      color: #ff3333;
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    .action-btn {
+      padding: 15px 40px;
+      border-radius: 30px;
+      border: none;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      min-width: 160px;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .get-btn {
+      background: #00cc44;
+    }
+
+    .next-btn {
+      background: #ff3333;
+    }
+
+    /* ============================================================
+       TRAFFIC LIGHTS
+       ============================================================ */
+    .traffic-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .traffic-light {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .traffic-light.green {
+      background: #00cc44;
+      border-color: #00cc44;
+      box-shadow: 0 0 20px rgba(0, 204, 68, 0.3);
+    }
+
+    .traffic-light.orange {
+      background: #ffa500;
+      border-color: #ffa500;
+      box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+    }
+
+    .traffic-light.red {
+      background: #ff3333;
+      border-color: #ff3333;
+      box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
+    }
+
+    .signal-strength {
+      text-align: center;
+      font-size: 1px;
+      color: rgba(0, 0, 0, 0.1);
+      margin-top: 5px;
+    }
+
+    .signal-strength strong {
+      color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* ============================================================
+       SIGNAL WARNING - MINIMAL (ADDED)
+       ============================================================ */
+    .signal-warning-mini {
+      text-align: center;
+      font-size: 10px;
+      color: #ff6666;
+      padding: 2px 0;
+      display: none;
+      opacity: 0.7;
+    }
+
+    .signal-warning-mini.active {
+      display: block;
+    }
+
+    /* ============================================================
+       SEED KEY (ADDED)
+       ============================================================ */
+    .seed-container {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0;
+    }
+
+    .seed-container input {
+      flex: 1;
+      padding: 8px 12px;
+      background: rgba(34, 34, 34, 0.9);
+      border: 1px solid rgba(255, 51, 51, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 13px;
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .seed-container input:focus {
+      border-color: #ff3333;
+    }
+
+    .seed-container input::placeholder {
+      color: #555;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .seed-container .btn-sm {
+      padding: 8px 14px;
+      font-size: 12px;
+      white-space: nowrap;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background: #00cc44;
+      color: white;
+    }
+
+    .seed-container .btn-sm:active {
+      transform: scale(0.95);
+    }
+
+    .seed-status {
+      font-size: 10px;
+      color: #666;
+      text-align: center;
+      margin-top: 3px;
+    }
+
+    .seed-status.valid {
+      color: #00cc44;
+    }
+
+    .seed-status.invalid {
+      color: #ff3333;
+    }
+
+    /* ============================================================
+       ROUND COUNTER (ADDED IN HEADER)
+       ============================================================ */
+    .round-counter {
+      font-size: 12px;
+      color: #888;
+      font-weight: bold;
+    }
+
+    .round-counter .num {
+      color: #ff6666;
+    }
+
+    /* ============================================================
+       MERCHANT CODE COPY (ADDED)
+       ============================================================ */
+    .merchant-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      margin: 6px 0;
+    }
+
+    .merchant-row code {
+      flex: 1;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffd700;
+      letter-spacing: 2px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+
+    .merchant-row .copy-btn {
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      color: #ffd700;
+      padding: 4px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 11px;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+
+    .merchant-row .copy-btn:active {
+      background: rgba(255, 215, 0, 0.25);
+    }
+
+    /* ============================================================
+       USER ID DISPLAY
+       ============================================================ */
+    .user-id-box {
+      background: rgba(0, 204, 68, 0.05);
+      border: 1px dashed rgba(0, 204, 68, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .user-id-box code {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffd700;
+      letter-spacing: 3px;
+      font-family: monospace;
+    }
+
+    /* ============================================================
+       ADMIN PANEL
+       ============================================================ */
+    .admin-panel {
+      display: none;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      background: rgba(26, 10, 10, 0.95);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .admin-panel.visible {
+      display: block;
+    }
+
+    .admin-toggle {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 999;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: #888;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+
+    .admin-toggle:hover {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-sm.green {
+      background: #00cc44;
+      color: white;
+    }
+
+    .btn-sm.red {
+      background: #ff3333;
+      color: white;
+    }
+
+    .btn-sm.outline {
+      background: transparent;
+      border: 1px solid #ff3333;
+      color: #ff3333;
+    }
+
+    .btn-sm:active {
+      transform: scale(0.95);
+    }
+
+    /* ============================================================
+       TOAST
+       ============================================================ */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #ff3333;
+      padding: 12px 24px;
+      border-radius: 10px;
+      z-index: 9998;
+      font-size: 14px;
+      color: white;
+      display: none;
+      max-width: 90%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .toast.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+
+    .toast.success {
+      border-color: #00cc44;
+    }
+
+    .toast.error {
+      border-color: #ff3333;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ============================================================
+       FOOTER LINKS
+       ============================================================ */
+    .footer-links {
+      margin-top: 15px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .footer-links a {
+      color: #666;
+      text-decoration: none;
+      font-size: 11px;
+      margin: 0 8px;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #ff6666;
+    }
+
+    .footer-links .commission-link {
+      color: #ffd700;
+      font-weight: bold;
+    }
+
+    .footer-links .commission-link:hover {
+      color: #ffe44d;
+    }
+
+    .footer-links .coding-link {
+      color: #00cc44;
+      font-weight: bold;
+    }
+
+    .footer-links .coding-link:hover {
+      color: #44ff88;
+    }
+    /* ============================================================
+       GLASS RADIO GROUP (Professional Package Selector)
+       ============================================================ */
+       .glass-radio-group {
+      --bg: rgba(255, 255, 255, 0.06);
+      --text: #e5e5e5;
+      display: flex;
+      position: relative;
+      background: var(--bg);
+      border-radius: 1rem;
+      backdrop-filter: blur(12px);
+      box-shadow:
+        inset 1px 1px 4px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 6px rgba(0, 0, 0, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .glass-radio-group input {
+      display: none;
+    }
+
+    .glass-radio-group label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 60px;
+      font-size: 13px;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--text);
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .glass-radio-group label:hover {
+      color: white;
+    }
+
+    .glass-radio-group input:checked + label {
+      color: #fff;
+    }
+
+    .glass-glider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: calc(100% / 3);
+      border-radius: 1rem;
+      z-index: 1;
+      transition:
+        transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56),
+        background 0.4s ease-in-out,
+        box-shadow 0.4s ease-in-out;
+    }
+
+    /* Silver */
+    #glass-silver:checked ~ .glass-glider {
+      transform: translateX(0%);
+      background: linear-gradient(135deg, #c0c0c055, #e0e0e0);
+      box-shadow:
+        0 0 18px rgba(192, 192, 192, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.4) inset;
+    }
+
+    /* Gold */
+    #glass-gold:checked ~ .glass-glider {
+      transform: translateX(100%);
+      background: linear-gradient(135deg, #ffd70055, #ffcc00);
+      box-shadow:
+        0 0 18px rgba(255, 215, 0, 0.5),
+        0 0 10px rgba(255, 235, 150, 0.4) inset;
+    }
+
+    /* Platinum */
+    #glass-platinum:checked ~ .glass-glider {
+      transform: translateX(200%);
+      background: linear-gradient(135deg, #d0e7ff55, #a0d8ff);
+      box-shadow:
+        0 0 18px rgba(160, 216, 255, 0.5),
+        0 0 10px rgba(200, 240, 255, 0.4) inset;
+    }
+    /* ============================================================
+       STAR RATING
+       ============================================================ */
+       .rating:not(:checked) > input {
+      position: absolute;
+      appearance: none;
+    }
+
+    .rating:not(:checked) > label {
+      float: right;
+      cursor: pointer;
+      font-size: 24px;
+      color: #666;
+    }
+
+    .rating:not(:checked) > label:before {
+      content: '★';
+    }
+
+    .rating > input:checked + label:hover,
+    .rating > input:checked + label:hover ~ label,
+    .rating > input:checked ~ label:hover,
+    .rating > input:checked ~ label:hover ~ label,
+    .rating > label:hover ~ input:checked ~ label {
+      color: #e58e09;
+    }
+
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+      color: #ff9e0b;
+    }
+
+    .rating > input:checked ~ label {
+      color: #ffa723;
+    }
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 480px) {
+      .circle-placeholder {
+        width: 160px;
+        height: 160px;
+        border-radius: 100px;
+        border: 6px solid #ff3333;
+        background: rgba(42, 26, 26, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        overflow: hidden;
+        flex-shrink: 0;
+        position: relative;
+      }
+
+      .multiplier-text {
+        font-size: 32px;
+      }
+
+      .action-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+        min-width: 140px;
+      }
+
+      .header {
+        padding: 15px;
+      }
+
+      .sharpi-text {
+        font-size: 22px;
+      }
+
+      .dashboard-header .sharpi-text {
+        font-size: 18px;
+      }
+
+      .traffic-light {
+        width: 26px;
+        height: 26px;
+        font-size: 16px;
+      }
+
+      .floating-button {
+        bottom: 80px;
+        right: 15px;
+      }
+
+      .get-started-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .merchant-row code {
+        font-size: 13px;
+      }
+
+      .seed-container input {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+
+      .seed-container .btn-sm {
+        font-size: 10px;
+        padding: 6px 10px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .circle-placeholder {
+        width: 130px;
+        height: 130px;
+        border-radius: 100px;
+        border: 5px solid #ff3333;
+        background: rgba(42, 26, 26, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+        overflow: hidden;
+        flex-shrink: 0;
+        position: relative;
+      }
+
+      .multiplier-text {
+        font-size: 28px;
+      }
+
+      .action-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        min-width: 120px;
+      }
+
+      .traffic-light {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+      }
+    }
+        /* ============================================================
+       FORCE VISIBILITY (FIX)
+       ============================================================ */
+     /* ============================================================
+       FORCE VISIBILITY (FIX)
+       ============================================================ */
+         /* ============================================================
+       FIX INVISIBLE ELEMENTS (PRESERVES LAYOUT)
+       ============================================================ */
+    .session-text {
+      color: white !important;
+    }
+
+    .multiplier-text {
+      color: #ff3333 !important;
+    }
+
+    #actionBtn {
+      display: inline-block !important;
+    }
+
+    .circle-placeholder {
+      display: flex !important;
+    }
+
+    .circle-inner {
+      display: flex !important;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- ============================================================
+       STARS BACKGROUND
+       ============================================================ -->
+  <div class="stars-container">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+  </div>
+
+  <!-- ============================================================
+       TOAST
+       ============================================================ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ============================================================
+       ROOT
+       ============================================================ -->
+       <div id="root">
+
+    <!-- ==========================================================
+         PAGE 1: LANDING
+         ========================================================== -->
+             <!-- ==========================================================
+         PAGE 1: LANDING
+         ========================================================== -->
+    <div class="page active" id="pageLanding">
+      <div class="page-container">
+        <div class="page-scroll">
+          <!-- Header -->
+          <div class="header">
+            <div class="logo-placeholder">🦈</div>
+            <div class="sharpi-text">SHARPI</div>
+          </div>
+
+          <!-- Lorem Ipsum -->
+          <div class="panel">
+            <div class="panel-text"> SHARPI IS A NEW TRUSTED 3RD PARTY PLATFORM THAT GIVES ACCURATE AVIATOR GAME SIGNALS PER ROUND IN AN INSTANT, USE AT OWNERS RISK .</div>
+          </div>
+
+          <div class="image-placeholder" id="image1Placeholder">
+            <img src="image1.jpg" alt="Image 1" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <div class="panel">
+            <div class="panel-text">HOW TO USE SHARPI: Create app account : pair your AVIATOR CLIENT SEED (found in your Aviator game settings menu): start predicting , Use a vpn like protonvpn and a good device to increase accuracy.</div>
+          </div>
+
+          <div class="image-placeholder" id="image2Placeholder">
+            <img src="image2.png" alt="Image 2" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <div class="panel">
+            <div class="panel-text">RISKS: Your Betting account may get banned if cashouts become unhealthy , We recommend you only to cashout less than $1600 daily to stay undetected. THIS APP IS NOT OWNED BY ANYONE AND WE DONOT TAKE RESPONSIBILITY FOR USAGE..</div>
+          </div>
+          <!-- Reviews Section -->
+          <div class="panel" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <div>
+                <div style="color:white; font-size:16px; font-weight:bold;"> Rated ⭐ 5</div>
+                <div style="color:#888; font-size:11px;">from 1000+ reviews in 2 weeks</div>
+              </div>
+              <div class="rating">
+                <input value="5" name="rate" id="star5" type="radio">
+                <label title="text" for="star5"></label>
+                <input value="4" name="rate" id="star4" type="radio">
+                <label title="text" for="star4"></label>
+                <input value="3" name="rate" id="star3" type="radio" checked="">
+                <label title="text" for="star3"></label>
+                <input value="2" name="rate" id="star2" type="radio">
+                <label title="text" for="star2"></label>
+                <input value="1" name="rate" id="star1" type="radio">
+                <label title="text" for="star1"></label>
+              </div>
+            </div>
+
+            <!-- Review 1 - Suraj Patel (Indian) -->
+            <div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="width:36px; height:36px; border-radius:50%; background:#ff6b6b; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; flex-shrink:0; font-size:14px;">SP</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:white; font-size:13px; font-weight:bold;">Suraj Patel</span>
+                  <span style="color:#666; font-size:10px;">+911*****</span>
+                </div>
+                <div style="color:#ccc; font-size:12px; margin-top:2px;">"धन्यवाद लेकिन मैं अपनी कमाई को दोगुना कैसे बढ़ा सकता हूँ?"</div>
+                <div style="color:#666; font-size:10px; margin-top:2px;">"Thanks but how can I increase my earnings double because yesterday i cashout 222,000INR and today i check my account banned for aviator?"</div>
+              </div>
+            </div>
+
+            <!-- Review 2 - Ssempa Benja -->
+            <div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="width:36px; height:36px; border-radius:50%; background:#4ecdc4; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; flex-shrink:0; font-size:14px;">SB</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:white; font-size:13px; font-weight:bold;">Ssempa Benja</span>
+                  <span style="color:#666; font-size:10px;">+2567*******</span>
+                </div>
+                <div style="color:#ccc; font-size:12px; margin-top:2px;">"The app works well but sometimes it loses signal at night, how can I fix that ?"</div>
+                <div style="color:#888; font-size:10px; margin-top:4px; background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:4px;">
+                  <span style="color:#666;">↳ epic.micheal:</span> "omo no fit use VPN it will remove that issue , i don buy 4 car for 2 month before take down "
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 3 - Big Stunner -->
+            <div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="width:36px; height:36px; border-radius:50%; background:#feca57; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; flex-shrink:0; font-size:14px;">BS</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:white; font-size:13px; font-weight:bold;">Big Stunner</span>
+                  <span style="color:#666; font-size:10px;">+2347*******</span>
+                </div>
+                <div style="color:#ccc; font-size:12px; margin-top:2px;">"guys please dont tell people about this app"</div>
+                <div style="color:#888; font-size:10px; margin-top:4px; background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:4px;">
+                  <span style="color:#666;">↳ isabirye james:</span> "theres enough fish in the sea anyone can get"
+                </div>
+              </div>
+            </div>
+
+            <!-- Show More Button -->
+            <div id="showMoreReviews" style="text-align:center; padding:6px 0; cursor:pointer; color:#ff6666; font-size:12px;" onclick="toggleReviews()">
+              Show more ▼
+            </div>
+
+            <!-- Hidden Reviews (4 & 5) -->
+            <div id="hiddenReviews" style="display:none;">
+              <!-- Review 4 - Ahmed Saleh -->
+              <div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <div style="width:36px; height:36px; border-radius:50%; background:#a29bfe; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; flex-shrink:0; font-size:14px;">AS</div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:white; font-size:13px; font-weight:bold;">Ahmed Saleh</span>
+                    <span style="color:#666; font-size:10px;">+2547*******</span>
+                  </div>
+                  <div style="color:#ccc; font-size:12px; margin-top:2px;">"Please the app works well but when I make like 10 accurate predictions, it starts losing signal, it tells me to wait 20 minutes to stabilize, but other than that, its better than trading forex"</div>
+                </div>
+              </div>
+
+              <!-- Review 5 - Skillsofficial -->
+              <div style="display:flex; gap:10px; padding:8px 0;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#fd79a8; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; flex-shrink:0; font-size:14px;">SO</div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:white; font-size:13px; font-weight:bold;">Skillsofficial</span>
+                    <span style="color:#666; font-size:10px;">+2567*******</span>
+                  </div>
+                  <div style="color:#ccc; font-size:12px; margin-top:2px;">"The predictions are accurate🥳, but the app loses signal when I over use it , i want to make 200m before its closed , so far 80."</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Footer -->
+          <div class="footer">
+            <div class="footer-text">Telegram:@Emergencycocks | WhatsApp:+8199829882 | TikTok:@sharpi-predict</div>
+            <div class="footer-text">Location: Sunjab,223st,mumbai/india |  Company Name:Skynetlabs@support.tech</div>
+            <div class="disclaimer">⚠️ THIS TOOL IS NOT FOR COMMERCIAL PURPOSE, ALL RIGHTS RESERVED 2026 </div>
+          </div>
+        </div>
+
+        <!-- Floating Button -->
+        <div class="floating-button" id="floatingBtn">
+          <button class="get-started-btn" onclick="goToPurchase()">GET STARTED</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         PAGE 2: PURCHASE
+         ========================================================== -->
+    <div class="page" id="pagePurchase">
+      <div class="page-container">
+        <div class="page-scroll">
+          <!-- Header -->
+          <div class="header">
+            <div class="logo-placeholder">🦈</div>
+            <div class="sharpi-text">SHARPI</div>
+            <div style="color:#888; font-size:12px; margin-top:5px;">Purchase Access</div>
+          </div>
+
+          <!-- Account Creation -->
+          <div class="panel" id="accountPanel">
+            <div style="color:#ff3333; font-weight:bold; margin-bottom:10px;">📝 Create Account</div>
+            <input type="text" id="regName" placeholder="Full Name" style="width:100%; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(255,51,51,0.2); border-radius:6px; color:white; margin-bottom:8px; outline:none;" />
+            <input type="email" id="regEmail" placeholder="Email Address" style="width:100%; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(255,51,51,0.2); border-radius:6px; color:white; margin-bottom:8px; outline:none;" />
+            <input type="text" id="regWhatsApp" placeholder="WhatsApp Number" style="width:100%; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(255,51,51,0.2); border-radius:6px; color:white; margin-bottom:8px; outline:none;" />
+            <button onclick="createAccount()" style="width:100%; padding:12px; background:#ff3333; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Create Account →</button>
+            <div id="regStatus" style="margin-top:8px; font-size:13px; color:#888;"></div>
+          </div>
+
+          <!-- User ID Display -->
+          <div class="panel" id="userIdPanel" style="display:none;">
+            <div style="color:#00cc44; font-weight:bold; margin-bottom:10px;">Your USER ID</div>
+            <div class="user-id-box">
+              <code id="userIdDisplay">---- ----</code>
+            </div>
+            <div style="font-size:12px; color:#888; margin-bottom:8px;"></div>
+            <button onclick="copyUserId()" style="padding:8px 20px; background:transparent; border:1px solid #ff3333; color:#ff3333; border-radius:6px; cursor:pointer; font-size:12px;">📋 Copy ID</button>
+          </div>
+
+          <!-- Packages -->
+                   <!-- Packages -->
+                   <div class="panel" style="border-color:rgba(255,215,0,0.3);">
+                    <div style="color:#ffd700; font-weight:bold; margin-bottom:10px;">💎 Choose Your Package</div>
+        
+                    <div class="glass-radio-group">
+                      <input type="radio" name="package" id="glass-silver" value="silver" checked onchange="selectPackage('silver')" />
+                      <label for="glass-silver">🥈 Silver</label>
+                      <input type="radio" name="package" id="glass-gold" value="gold" onchange="selectPackage('gold')" />
+                      <label for="glass-gold">🥇 Gold</label>
+                      <input type="radio" name="package" id="glass-platinum" value="platinum" onchange="selectPackage('platinum')" />
+                      <label for="glass-platinum">💠 Platinum</label>
+                      <div class="glass-glider"></div>
+                    </div>
+        
+                    <div id="packageSilver" class="package-details active">
+                      <div class="price" style="color:#c0c0c0;">$14.99 - 54,503UGX</div>
+                      <div class="features">• 6 predictions/day for 1 week • Basic signal-13mbps </div>
+                    </div>
+                    <div id="packageGold" class="package-details">
+                      <div class="price" style="color:#ffd700;">$34.99 - 127,233UGX</div>
+                      <div class="features">•50 predictions/day for 2 weeks • 24/7 support• signal-24mbps • Early access to new features</div>
+                    </div>
+                    <div id="packagePlatinum" class="package-details">
+                      <div class="price" style="color:#a0d8ff;">$75.99 - 276,299UGX</div>
+                      <div class="features">•Unlimited predictions/day for 1 month + VIP support • Early access • Exclusive signals • signal-60mbps</div>
+                    </div>
+        
+                    <!-- Payment with Copy Button -->
+                    <div style="margin-top:15px;">
+                      <div style="color:#888; font-size:12px; margin-bottom:5px;">📲 PAY VIA AIRTEL MERCHANT CODE ON YOUR PHONE</div>
+                      <div class="merchant-row">
+                        <code id="merchantCodeDisplay">7049771</code>
+                        <button class="copy-btn" onclick="copyMerchantCode()">📋 Copy</button>
+                      </div>
+                      <input type="text" id="paymentRef" placeholder="Enter payment reference (ANY DIGITS 4+)" style="width:100%; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(255,215,0,0.2); border-radius:6px; color:white; margin-bottom:8px; outline:none;" />
+<input type="text" id="promoCode" placeholder="Enter affiliate promo code (optional)" style="width:100%; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(255,215,0,0.1); border-radius:6px; color:white; margin-bottom:8px; outline:none; text-transform:uppercase;" />
+                      <button onclick="verifyPayment()" style="width:100%; padding:12px; background:#ffd700; color:black; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">✅ Click Here After Payment</button>
+                      <div id="paymentStatus" style="margin-top:8px; font-size:13px; color:#888;"></div>
+                    </div>
+        
+                    <div style="margin-top:10px; text-align:center; font-size:11px; color:#666;">
+                      ⚡ Payment verified instantly. Enter your phone number or any number as reference . App automatically recieves a key unlock from the Admin side in 30 seconds).
+                    </div>
+                  </div>
+         <!-- Token Entry Section -->
+<div class="panel" style="border-color:rgba(0,204,68,0.3); display:none;">
+  <div style="color:#00cc44; font-weight:bold; margin-bottom:10px;">🔑 Enter Access Token</div>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <input type="text" id="tokenInput" placeholder="Paste the token sent by admin" style="flex:1; padding:10px; background:rgba(34,34,34,0.9); border:1px solid rgba(0,204,68,0.2); border-radius:6px; color:white; outline:none; font-family:monospace; font-size:13px;" />
+    <button onclick="verifyAccessToken()" style="padding:10px 20px; background:#00cc44; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; white-space:nowrap;">Unlock</button>
+  </div>
+  <div id="tokenStatus" style="margin-top:6px; font-size:12px; color:#888; text-align:center;">Enter the token sent by admin via WhatsApp</div>
+</div>
+
+          <!-- Instructions / FAQ -->
+          <div class="panel">
+            <div style="color:#ff3333; font-weight:bold; margin-bottom:10px;">📖 How to pay</div>
+            <div style="color:#ccc; font-size:13px; line-height:1.8;">
+              <p>1. USE AIRTEL MERCHANT PAY ; Dial 185*9#.</p>
+              <p>2. Enter Merchant Code and Reference number , Confirm.</p>
+              <p>3. Your Payment is automatically recorded and your App receives a automatic unlock key in less than one minute.</p>
+            </div>
+            <div style="color:#ff3333; font-weight:bold; margin-bottom:10px;">📖 How to start predicting</div>
+            <p>1. Open your betting platform , open Aviator , at the top right corner near your balance </p>
+               </p>2 click the 3 dot menu , scroll down to (provably fair game settings) , copy the (client seed) (e.g 7u8e7n827ed11dcfst7t1) thats all.</p>
+               </p>3 Change your client seed every 26 rounds for best results.</p>
+            <p>4. SIMPLE PROCESS , GUARANTEED WINS , CHOOSE WHEN TO WIN .</p>
+
+            <div style="margin-top:10px; color:#888; font-size:12px;">
+              <p> <strong>FAQ:</strong> USE A VPN FOR BEST RESULTS.</p>
+              <p>📞 <strong>Support:</strong> Contact us on WhatsApp for help +25670000000.</p>
+            </div>
+          </div>
+
+          <!-- Footer Links -->
+          <div class="footer-links">
+            <a href="#" class="coding-link" onclick="showToast('🚀 Learn to code at our online classes!')">📚 Learn how to code, join our online classes now</a>
+            <br>
+            <a href="#" class="commission-link" onclick="showToast('💰 Earn 50% commission from every referral! Join now.')">💰 Earn 50% commission from every referral, join now</a>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div class="footer-text"> Telegram |  WhatsApp |  TikTok</div>
+            <div class="footer-text"> Location |  Company Name</div>
+            <div class="disclaimer">⚠️ This is a simulator toy - not real predictions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         PAGE 3: DASHBOARD (ADMIN EXCLUSIVE)
+         ========================================================== -->
+             <!-- ==========================================================
+         PAGE 3: DASHBOARD (ADMIN EXCLUSIVE)
+         ========================================================== -->
+    <div class="page" id="pageDashboard">
+      <div class="page-container">
+        <div class="dashboard-header">
+          <button class="back-btn" onclick="goToLanding()">←</button>
+          <span class="sharpi-text" onclick="resetSession()" style="cursor:pointer;">SHARPI</span>
+          <!-- Round Counter Added -->
+          <span class="round-counter">R<span class="num" id="roundDisplay">0</span></span>
+          <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+        </div>
+
+        <div class="animation-placeholder" id="animationPlaceholder">
+          <img src="image3.png" alt="Animation" style="width:100%; height:100%; object-fit:cover;" />
+        </div>
+        <!-- Connection Warning Banner -->
+        <div id="connectionWarning" style="
+          background: rgba(255, 68, 68, 0.12);
+          border-left: 3px solid #ff4444;
+          padding: 6px 12px;
+          margin: 4px 12px 0 12px;
+          border-radius: 4px;
+          display: none;
+          align-items: center;
+          gap: 8px;
+          backdrop-filter: blur(8px);
+          flex-shrink: 0;
+        ">
+          <span style="font-size:14px;">⚠️</span>
+          <span style="font-size:10px; color:#ff6666; line-height:1.3;">
+            Poor internet connection — predictions are estimated to be less than 20% accurate.<br>
+            <span style="color:#888; font-size:9px;">Increase accuracy with a stable connection and VPN.</span>
+          </span>
+        </div>
+        <div class="dashboard-content">
+          <!-- Signal Strength -->
+       
+
+          <!-- Seed Key Input (ADDED) -->
+          <div style="width:100%; max-width:400px; margin:5px 0 10px 0;">
+            <div class="seed-container">
+              <input type="text" id="seedKey" placeholder="15-char seed key" maxlength="15" />
+              <button class="btn-sm" onclick="setSeedKey()">Set</button>
+            </div>
+            <div id="seedStatus" class="seed-status">Enter a 15-character seed key</div>
+          </div>
+
+          <div class="session-text" id="sessionText">Session: #----</div>
+
+          <div class="circle-placeholder" id="circleDisplay">
+            <div class="circle-inner" id="circleInner">
+              <span class="multiplier-text" id="multiplierValue">--</span>
+            </div>
+          </div>
+
+          <button class="action-btn get-btn" id="actionBtn" onclick="handleAction()">GET SIGNALS</button>
+
+          <div class="history-container">
+            <div style="color:#666; font-size:12px; margin-bottom:8px;"> History</div>
+            <div id="historyList">
+              <div style="color:#444; font-size:12px; text-align:center; padding:10px 0;">No predictions yet</div>
+            </div>
+            <div class="history-show-more" id="showMoreBtn" onclick="toggleHistory()" style="display:none;">Show more ▼</div>
+            <div class="history-full" id="historyFull"></div>
+          </div>
+
+          <!-- Footer Links -->
+          <div class="footer-links">
+            <a href="#" class="coding-link" onclick="showToast(' Learn to code at our online classes!')">📚 Learn how to code, join our online classes now</a>
+            <br>
+            <a href="#" class="commission-link" onclick="showToast(' Earn 50% commission from every referral! Join now.')">💰 Earn 50% commission from every referral, join now</a>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-text"> Telegram |  WhatsApp |  TikTok</div>
+          <div class="disclaimer">⚠️ Simulator - Not real predictions</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       ADMIN TOGGLE
+       ============================================================ -->
+
+ 
+
+  <!-- ============================================================
+       SCRIPT
+       ============================================================ -->
+  <script>
+  
+// ============================================================
+// SUPABASE CONFIGURATION
+// ============================================================
+// ============================================================
+// SUPABASE CONFIGURATION
+// ============================================================
+const SUPABASE_URL = 'https://wkdewqwqhopbwygsfdav.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5QGobPerm0Bw973REoEvXg_Cs6n70lZ';
+
+// Initialize Supabase client
+let supabaseClient = null;
+
+// Check if Supabase is loaded
+if (typeof supabase !== 'undefined' && supabase.createClient) {
+    try {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Supabase initialized successfully');
+    } catch (e) {
+        console.error('❌ Failed to initialize Supabase:', e);
+    }
+} else {
+    console.warn('⚠️ Supabase library not loaded. Check your script tag.');
+}
+// ============================================================
+// SUPABASE REALTIME - LISTEN FOR ADMIN DISPATCH
+// ============================================================
+function listenForAdminDispatch(userId) {
+    if (!supabaseClient) {
+        console.warn('⚠️ Supabase not initialized, cannot listen for dispatch');
+        return null;
+    }
+
+    console.log('📡 Listening for admin dispatch for user:', userId);
+
+    // Subscribe to changes on payment_requests table
+    const channel = supabaseClient
+        .channel('payment_requests_channel')
+        .on(
+            'postgres_changes',
+            {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'payment_requests',
+                filter: `user_id=eq.${userId}`
+            },
+            (payload) => {
+                console.log('📡 Dispatch event received:', payload);
+                
+                const newData = payload.new;
+                if (newData.token && newData.status === 'verified') {
+                    console.log('✅ Admin dispatched token! Unlocking app...');
+                    autoUnlockApp(newData.token);
+                }
+            }
+        )
+        .subscribe((status) => {
+            console.log('📡 Realtime subscription status:', status);
+        });
+    
+    return channel;
+}
+
+// ============================================================
+// AUTO UNLOCK APP
+// ============================================================
+function autoUnlockApp(token) {
+    if (!currentUser) {
+        console.warn('⚠️ No current user to unlock');
+        return;
+    }
+    
+    console.log('🔓 Auto-unlocking app for user:', currentUser.id);
+    
+    // Update current user
+    currentUser.verified = true;
+    currentUser.token = token;
+    
+    // Update in appData
+    const userIndex = appData.users.findIndex(u => u.id === currentUser.id);
+    if (userIndex !== -1) {
+        appData.users[userIndex] = currentUser;
+    }
+    saveData();
+    
+    showToast('✅ Access granted! Welcome to SHARPI!', 'success');
+    
+    // Navigate to dashboard after a moment
+    setTimeout(() => {
+        goToDashboard();
+    }, 1500);
+}
+
+
+    let appData = {
+      users: [],
+      sales: [],
+      userIdCounter: 1576
+    };
+
+    // ============================================================
+    // LOAD DATA
+    // ============================================================
+    function loadData() {
+      try {
+        const saved = localStorage.getItem('sharpiAppData');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          appData = { ...appData, ...parsed };
+        }
+      } catch (e) {}
+    }
+
+    function saveData() {
+      localStorage.setItem('sharpiAppData', JSON.stringify(appData));
+    }
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg, type = '') {
+      const el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'toast show ' + type;
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => { el.className = 'toast'; }, 3000);
+    }
+
+    // ============================================================
+    // MERCHANT CODE COPY
+    // ============================================================
+    function copyMerchantCode() {
+      const code = document.getElementById('merchantCodeDisplay').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(() => showToast('Merchant code copied!', 'success'));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(' Merchant code copied!', 'success');
+      }
+    }
+
+    // ============================================================
+    // FLOATING BUTTON
+    // ============================================================
+    setTimeout(() => {
+      const btn = document.getElementById('floatingBtn');
+      if (btn) {
+        btn.classList.add('visible');
+        console.log(' Floating button shown');
+      } else {
+        console.log(' Floating button not found');
+      }
+    }, 5000);
+
+    // ============================================================
+    // PAGE NAVIGATION
+    // ============================================================
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(pageId);
+      if (target) {
+        target.classList.add('active');
+        console.log('📄 Page shown:', pageId);
+      } else {
+        console.log('❌ Page not found:', pageId);
+      }
+    }
+
+    function goToPurchase() {
+      showPage('pagePurchase');
+    }
+
+    function goToLanding() {
+      showPage('pageLanding');
+      if (signalInterval) clearInterval(signalInterval);
+    }
+
+    function goToDashboard() {
+      if (!currentUser || !currentUser.verified) {
+        showToast(' Please verify payment first', 'error');
+        return;
+      }
+      showPage('pageDashboard');
+      if (currentUser) { listenForAdminDispatch(currentUser.id); }
+     
+      showToast(' Enter seed key to start predicting.', 'success');
+    }
+
+    // ============================================================
+    // ACCOUNT CREATION
+    // ============================================================
+    function createAccount() {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const whatsapp = document.getElementById('regWhatsApp').value.trim();
+
+      if (!name || !email || !whatsapp) {
+        document.getElementById('regStatus').textContent = '❌ Please fill all fields';
+        document.getElementById('regStatus').style.color = '#ff3333';
+        return;
+      }
+
+      const existing = appData.users.find(u => u.email === email || u.whatsapp === whatsapp);
+      if (existing) {
+        document.getElementById('regStatus').textContent = '⚠️ Account exists. Logging in...';
+        document.getElementById('regStatus').style.color = '#ffd700';
+        currentUser = existing;
+        showUserDashboard();
+        return;
+      }
+
+      const idNum = appData.userIdCounter++;
+      const idStr = String(idNum).padStart(6, '0');
+      const userId = idStr.slice(0, 3) + ' ' + idStr.slice(3);
+
+      const user = {
+        id: userId,
+        name: name,
+        email: email,
+        whatsapp: whatsapp,
+        package: null,
+        verified: false,
+        createdAt: new Date().toISOString()
+      };
+
+      appData.users.push(user);
+      saveData();
+      currentUser = user;
+
+      document.getElementById('accountPanel').style.display = 'none';
+      document.getElementById('userIdPanel').style.display = 'block';
+      document.getElementById('userIdDisplay').textContent = userId;
+      document.getElementById('regStatus').textContent = '✅ Account created! User ID: ' + userId;
+      document.getElementById('regStatus').style.color = '#00cc44';
+
+      const userBadge = document.getElementById('userBadge');
+      if (userBadge) {
+        userBadge.textContent = '👤 ' + name;
+      }
+
+      showToast(' Account created! Welcome, ' + name, 'success');
+
+      if (currentUser.verified) {
+        goToDashboard();
+      }
+      // Start listening for admin dispatch
+if (currentUser) {
+    listenForAdminDispatch(currentUser.id);
+}
+    }
+
+    function showUserDashboard() {
+      document.getElementById('accountPanel').style.display = 'none';
+      document.getElementById('userIdPanel').style.display = 'block';
+      document.getElementById('userIdDisplay').textContent = currentUser.id;
+      // Start listening for admin dispatch
+if (currentUser) {
+    listenForAdminDispatch(currentUser.id);
+}
+
+      if (currentUser.verified) {
+        showToast(' Welcome back, ' + currentUser.name, 'success');
+        goToDashboard();
+      } else {
+        showToast('💎 Choose a package and verify payment', '');
+      }
+    }
+
+    function copyUserId() {
+      const id = document.getElementById('userIdDisplay').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(id).then(() => showToast(' Copied: ' + id, 'success'));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = id;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(' Copied: ' + id, 'success');
+      }
+    }
+
+    // ============================================================
+    // PACKAGE SELECTION
+    // ============================================================
+    function selectPackage(pkg) {
+      selectedPackage = pkg;
+      document.querySelectorAll('.package-details').forEach(el => el.classList.remove('active'));
+      document.getElementById('package' + pkg.charAt(0).toUpperCase() + pkg.slice(1)).classList.add('active');
+    }
+
+    // ============================================================
+    // PAYMENT VERIFICATION
+    // ============================================================
+ // ============================================================
+// PAYMENT VERIFICATION (WITH SUPABASE)
+// ============================================================
+async function verifyPayment() {
+    if (!currentUser) {
+        showToast('❌ Please create an account first', 'error');
+        return;
+    }
+
+    if (currentUser.verified) {
+        document.getElementById('paymentStatus').textContent = '✅ Already verified!';
+        document.getElementById('paymentStatus').style.color = '#00cc44';
+        showToast('✅ Already verified!', 'success');
+        goToDashboard();
+        return;
+    }
+
+    const ref = document.getElementById('paymentRef').value.trim();
+    if (!ref) {
+        document.getElementById('paymentStatus').textContent = '❌ Please enter payment reference';
+        document.getElementById('paymentStatus').style.color = '#ff3333';
+        return;
+    }
+
+    const pkg = PACKAGES[selectedPackage];
+    const promoCode = document.getElementById('promoCode').value.trim().toUpperCase() || null;
+
+    // Generate user string (for admin verification)
+    const userString = generateUserString();
+    
+    // Prepare payment data
+    const paymentData = {
+        userId: currentUser.id,
+        userName: currentUser.name,
+        userEmail: currentUser.email,
+        userWhatsApp: currentUser.whatsapp,
+        package: selectedPackage,
+        packageName: pkg.name,
+        amount: pkg.price,
+        ref: ref,
+        promoCode: promoCode,
+        userString: userString,
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+    };
+
+    // ==========================================================
+    // SAVE TO SUPABASE
+    // ==========================================================
+    let supabaseSuccess = false;
+    
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('payment_requests')
+                .insert([{
+                    user_id: currentUser.id,
+                    user_name: currentUser.name,
+                    user_email: currentUser.email,
+                    user_whatsapp: currentUser.whatsapp,
+                    package: selectedPackage,
+                    package_name: pkg.name,
+                    amount: pkg.price,
+                    ref: ref,
+                    promo_code: promoCode,
+                    user_string: userString,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                }])
+                .select();
+
+            if (error) {
+                console.error('❌ Supabase insert error:', error);
+                showToast('⚠️ Payment recorded locally but failed to sync', 'error');
+            } else {
+                console.log('✅ Payment saved to Supabase:', data);
+                supabaseSuccess = true;
+            }
+        } catch (e) {
+            console.error('❌ Supabase error:', e);
+        }
+    } else {
+        console.warn('⚠️ Supabase not initialized, using localStorage only');
+    }
+
+    // ==========================================================
+    // SAVE TO LOCAL STORAGE (backup)
+    // ==========================================================
+    appData.sales.push({
+        userId: currentUser.id,
+        userName: currentUser.name,
+        package: selectedPackage,
+        amount: pkg.price,
+        ref: ref,
+        promoCode: promoCode,
+        date: new Date().toISOString(),
+        verified: false,
+        status: 'pending',
+        synced: supabaseSuccess || false
+    });
+    saveData();
+
+    // ==========================================================
+    // UPDATE UI
+    // ==========================================================
+    const statusEl = document.getElementById('paymentStatus');
+    if (statusEl) {
+        let statusMsg = '✅ Payment recorded! ';
+        if (supabaseSuccess) statusMsg += '📡 Synced to server. ';
+        statusMsg += '\n📱 Waiting for admin to send your token.';
+        
+        statusEl.innerHTML = statusMsg.replace(/\n/g, '<br>');
+        statusEl.style.color = '#ffd700';
+    }
+
+    // ==========================================================
+    // HIDE PAYMENT SECTION & SHOW TOKEN ENTRY
+    // ==========================================================
+    hidePaymentSection();
+
+    const tokenPanel = document.querySelector('.panel[style*="border-color:rgba(0,204,68,0.3)"]');
+    if (tokenPanel) {
+        tokenPanel.style.display = 'block';
+    }
+
+    const tokenStatus = document.getElementById('tokenStatus');
+    if (tokenStatus) {
+        tokenStatus.textContent = '✅ Payment recorded! Admin will send your token shortly.';
+        tokenStatus.style.color = '#ffd700';
+    }
+
+    showToast('✅ Payment recorded! Waiting for token.', 'success');
+
+    // ==========================================================
+    // OPEN WHATSAPP (for manual backup)
+    // ==========================================================
+    const adminPhone = '256700000000';
+    const message = `🦈 SHARPI PAYMENT\n\n` +
+        `👤 User: ${currentUser.name}\n` +
+        `🆔 ID: ${currentUser.id}\n` +
+        `📱 Contact: ${currentUser.whatsapp}\n` +
+        `📦 Package: ${pkg.name}\n` +
+        `💰 Amount: $${pkg.price}\n` +
+        `📋 Ref: ${ref}` +
+        (promoCode ? `\n🎫 Promo Code: ${promoCode}` : '') +
+        `\n\n📋 User Code: ${userString || 'N/A'}` +
+        `\n\n✅ Please generate and send access token.`;
+
+    setTimeout(() => {
+        const url = 'https://wa.me/' + adminPhone + '?text=' + encodeURIComponent(message);
+        window.open(url, '_blank');
+    }, 1500);
+}
+
+function hidePaymentSection() {
+  // Hide payment panel
+  const paymentPanel = document.querySelector('.panel[style*="border-color:rgba(255,215,0,0.3)"]');
+  if (paymentPanel) {
+    paymentPanel.style.display = 'none';
+  }
+  
+  // Hide payment status
+  const paymentStatus = document.getElementById('paymentStatus');
+  if (paymentStatus) {
+    paymentStatus.style.display = 'none';
+  }
+  
+  // Show token panel
+  const tokenPanel = document.querySelector('.panel[style*="border-color:rgba(0,204,68,0.3)"]');
+  if (tokenPanel) {
+    tokenPanel.style.display = 'block';
+  }
+  
+  // Clear any stale payment messages
+  const tokenStatus = document.getElementById('tokenStatus');
+  if (tokenStatus) {
+    tokenStatus.textContent = 'Enter the token sent by admin via WhatsApp';
+    tokenStatus.style.color = '#888';
+  }
+}
+// Letter → Number mapping (A=1, B=2, ... Z=26)
+function lettersToNumbers(str) {
+  if (!str) return '';
+  return str.toUpperCase().split('').map(char => {
+    const code = char.charCodeAt(0) - 64;
+    if (code >= 1 && code <= 26) {
+      return code;
+    }
+    return '';
+  }).filter(v => v !== '').join('.');
+}
+
+// Number → Letter mapping (0=a, 1=b, ... 9=j)
+function numbersToLetters(str) {
+  if (!str) return '';
+  const map = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  return str.replace(/\D/g, '').split('').map(digit => {
+    const num = parseInt(digit);
+    return map[num] || '0';
+  }).join('.');
+}
+
+// Generate the hidden key (never displayed to user)
+function generateHiddenKey(user) {
+  if (!user) return null;
+
+  // Get name parts
+  const nameParts = user.name ? user.name.trim().split(' ') : ['Unknown'];
+  const firstName = nameParts[0] || 'Unknown';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Convert first name to numbers (ADA → 1.4.1)
+  const firstNamePart = lettersToNumbers(firstName);
+
+  // Convert last name to numbers (EVE → 5.22.5)
+  const lastNamePart = lastName ? lettersToNumbers(lastName) : '';
+
+  // Convert phone to letters (07503380 → 0.g.e.0.c.c.h.0)
+  const phone = user.whatsapp || user.contact || '';
+  const phonePart = numbersToLetters(phone);
+
+  // Convert User ID to letters (2728 → b.g.b.h)
+  const userId = user.id || '';
+  const userIdClean = userId.replace(/\s/g, '');
+  const idPart = numbersToLetters(userIdClean);
+
+  // Build the key: firstName_lastName_phone_userId
+  let key = firstNamePart;
+  if (lastNamePart) {
+    key += '_' + lastNamePart;
+  }
+  key += '_' + phonePart + '_' + idPart;
+
+  return key;
+}
+
+// ============================================================
+// TOKEN VERIFICATION (User enters token from admin)
+// ============================================================
+
+function verifyToken(enteredToken, user) {
+  const userObj = user || window.currentUser || currentUser;
+  
+  if (!userObj) {
+    return { valid: false, reason: 'No user found' };
+  }
+
+  const hiddenKey = generateHiddenKey(userObj);
+
+  if (enteredToken === hiddenKey) {
+    return { valid: true, token: enteredToken };
+  }
+
+  return { valid: false, reason: 'Invalid token' };
+} // ============================================================
+function verifyAccessToken() {
+  // Get currentUser from global scope
+  const user = window.currentUser || currentUser;
+  
+  if (!user) {
+    const statusEl = document.getElementById('tokenStatus');
+    if (statusEl) {
+      statusEl.textContent = '❌ Please create an account first';
+      statusEl.style.color = '#ff3333';
+    }
+    showToast(' Please create an account first', 'error');
+    return;
+  }
+
+  if (user.verified) {
+    const statusEl = document.getElementById('tokenStatus');
+    if (statusEl) {
+      statusEl.textContent = '✅ Already verified!';
+      statusEl.style.color = '#00cc44';
+    }
+    showToast(' Already verified!', 'success');
+    goToDashboard();
+    return;
+  }
+
+  const input = document.getElementById('tokenInput');
+  if (!input) {
+    showToast(' Token input not found', 'error');
+    return;
+  }
+
+  const enteredToken = input.value.trim();
+  if (!enteredToken) {
+    const statusEl = document.getElementById('tokenStatus');
+    if (statusEl) {
+      statusEl.textContent = '❌ Please enter your access token';
+      statusEl.style.color = '#ff3333';
+    }
+    return;
+  }
+
+  // Verify the token
+  const result = verifyToken(enteredToken, user);
+
+  if (!result.valid) {
+    const statusEl = document.getElementById('tokenStatus');
+    if (statusEl) {
+      statusEl.textContent = ' ' + result.reason;
+      statusEl.style.color = '#ff3333';
+    }
+    showToast(' ' + result.reason, 'error');
+    return;
+  }
+
+  // Token is valid - grant access
+  user.verified = true;
+  user.package = 'verified';
+  user.tokenUsed = enteredToken;
+
+  // Update in appData
+  const userIndex = appData.users.findIndex(u => u.id === user.id);
+  if (userIndex !== -1) {
+    appData.users[userIndex] = user;
+  }
+  window.currentUser = user;
+  currentUser = user;
+  saveData();
+
+  const statusEl = document.getElementById('tokenStatus');
+  if (statusEl) {
+    statusEl.textContent = '✅ Access granted! Welcome to SHARPI!';
+    statusEl.style.color = '#00cc44';
+  }
+  showToast(' Access granted!', 'success');
+
+  hidePaymentSection();
+
+  setTimeout(() => {
+    goToDashboard();
+  }, 1500);
+}
+    // ============================================================
+    // ADMIN: GENERATE TOKEN
+    // ============================================================
+
+    function adminGenerateToken() {
+      const newToken = generateNewToken();
+      
+      if (VALID_TOKENS.includes(newToken)) {
+        return adminGenerateToken();
+      }
+      
+      VALID_TOKENS.push(newToken);
+      
+      showToast(' New token generated: ' + newToken, 'success');
+      
+      const resultDiv = document.getElementById('adminDecodeResult');
+      if (resultDiv) {
+        resultDiv.innerHTML = `
+          <div style="background:rgba(255,215,0,0.1); border:1px solid #ffd700; border-radius:8px; padding:12px; margin-top:8px; text-align:center;">
+            <div style="color:#888; font-size:10px;">🔑 New Token</div>
+            <div style="font-size:20px; font-weight:bold; color:#ffd700; font-family:monospace; letter-spacing:2px; margin:5px 0;">${newToken}</div>
+            <button class="btn-sm green" onclick="copyText('${newToken}')">📋 Copy Token</button>
+          </div>
+        `;
+      }
+      
+      return newToken;
+    }
+
+    // ============================================================
+    // ADMIN: VIEW USED TOKENS
+    // ============================================================
+
+    function adminViewUsedTokens() {
+      const usedList = usedTokens.join('\n');
+      if (usedList.length === 0) {
+        showToast(' No tokens used yet', 'success');
+        return;
+      }
+      
+      const resultDiv = document.getElementById('adminDecodeResult');
+      if (resultDiv) {
+        resultDiv.innerHTML = `
+          <div style="background:rgba(255,215,0,0.1); border:1px solid #ffd700; border-radius:8px; padding:12px; margin-top:8px;">
+            <div style="color:#888; font-size:10px;">📋 Used Tokens</div>
+            <div style="font-size:12px; color:#ccc; font-family:monospace; max-height:150px; overflow-y:auto;">
+              ${usedList.split('\n').map(t => `<div>• ${t}</div>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ============================================================
+    // ADMIN: VERIFY USER STRING & GENERATE TOKEN
+    // ============================================================
+
+    function verifyUserAndGenerateToken() {
+      const input = document.getElementById('adminUserStringInput');
+      if (!input) {
+        showToast(' Input field not found', 'error');
+        return;
+      }
+
+      const userString = input.value.trim();
+
+      if (!userString) {
+        showToast(' Please paste the user code', 'error');
+        return;
+      }
+
+      const result = decodeUserString(userString);
+
+      const resultDiv = document.getElementById('adminDecodeResult');
+      if (!resultDiv) {
+        showToast(' Result display not found', 'error');
+        return;
+      }
+
+      if (!result.valid) {
+        resultDiv.innerHTML = `
+          <div style="color:#ff3333; padding:10px; border:1px solid #ff3333; border-radius:8px; font-size:12px;">
+             Invalid Code: ${result.error}
+          </div>
+        `;
+        showToast(' Invalid user code', 'error');
+        return;
+      }
+
+      const data = result.data;
+      window._currentUserData = data;
+
+      resultDiv.innerHTML = `
+        <div style="color:#00cc44; padding:10px; border:1px solid #00cc44; border-radius:8px; font-size:12px;">
+          <div style="font-weight:bold; margin-bottom:5px;">✅ User Verified</div>
+          <div style="color:#ccc; line-height:1.8;">
+            <div>👤 Name: <strong style="color:white;">${data.name || 'Unknown'}</strong></div>
+            <div>📱 Contact: <strong style="color:white;">${data.contact || 'Unknown'}</strong></div>
+            <div>🆔 User ID: <strong style="color:white;">${data.userId || 'Unknown'}</strong></div>
+            <div>📦 Package: <strong style="color:white;">${data.package || 'Unknown'}</strong></div>
+            <div>💰 Amount: <strong style="color:white;">$${data.amount || 0}</strong></div>
+            <div>📋 Ref: <strong style="color:white;">${data.ref || 'Unknown'}</strong></div>
+            <div>⏰ Time: <strong style="color:white;">${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Unknown'}</strong></div>
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-sm green" onclick="generateAndSendToken()">🔑 Generate & Send Token</button>
+            <button class="btn-sm outline" onclick="copyText('${userString}')">📋 Copy Code</button>
+          </div>
+        </div>
+      `;
+
+      showToast('User verified! Ready to generate token.', 'success');
+    }
+
+    function generateAndSendToken() {
+      const data = window._currentUserData;
+      if (!data) {
+        showToast(' No user data found. Verify user first.', 'error');
+        return;
+      }
+
+      const token = generateAdminToken(data.userId, data.name, data.contact);
+
+      let tokens = [];
+      try {
+        tokens = JSON.parse(localStorage.getItem('adminTokens') || '[]');
+      } catch (e) {
+        tokens = [];
+      }
+
+      tokens.push({
+        token: token,
+        userId: data.userId,
+        name: data.name,
+        contact: data.contact,
+        ref: data.ref,
+        package: data.package,
+        createdAt: new Date().toISOString(),
+        used: false
+      });
+      localStorage.setItem('adminTokens', JSON.stringify(tokens));
+
+      const sale = appData.sales.find(s => s.ref === data.ref);
+      if (sale) {
+        sale.verified = true;
+        sale.status = 'verified';
+        sale.token = token;
+        saveData();
+      }
+
+      const resultDiv = document.getElementById('adminDecodeResult');
+      if (resultDiv) {
+        resultDiv.innerHTML += `
+          <div style="background:rgba(255,215,0,0.1); border:1px solid #ffd700; border-radius:8px; padding:12px; margin-top:10px; text-align:center;">
+            <div style="color:#888; font-size:10px;">🔑 Admin Token (Send to User)</div>
+            <div style="font-size:22px; font-weight:bold; color:#ffd700; font-family:monospace; letter-spacing:2px; margin:5px 0;">${token}</div>
+            <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+              <button class="btn-sm green" onclick="copyText('${token}')">📋 Copy Token</button>
+              <button class="btn-sm outline" onclick="sendTokenViaWhatsApp('${token}')">📤 Send via WhatsApp</button>
+            </div>
+          </div>
+        `;
+      }
+
+      showToast(' Token generated! Send to user.', 'success');
+    }
+
+    function sendTokenViaWhatsApp(token) {
+      const data = window._currentUserData;
+      if (!data) {
+        showToast(' No user data found', 'error');
+        return;
+      }
+
+      const contact = data.contact;
+      const name = data.name;
+
+      const message = `🦈 SHARPI ACCESS TOKEN
+
+✅ Payment Verified!
+🔑 Your Token: ${token}
+
+📝 How to use:
+1. Open the SHARPI app
+2. Go to "Enter Access Token"
+3. Paste the token above
+4. Start predicting!
+
+⚠️ Token is one-time use.
+📞 Support: [Your WhatsApp Number]`;
+
+      const url = `https://wa.me/${contact}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+
+      showToast('📤 WhatsApp opened! Send token to user.', 'success');
+    }
+
+    // ============================================================
+    // COPY TEXT
+    // ============================================================
+
+    function copyText(text) {
+      if (!text) {
+        showToast(' Nothing to copy', 'error');
+        return;
+      }
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('✅ Copied!', 'success');
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('✅ Copied!', 'success');
+      } catch (e) {
+        showToast('❌ Failed to copy', 'error');
+      }
+      document.body.removeChild(ta);
+    }
+
+    // ============================================================
+    // SHARED LOGIC: CHECKSUM GENERATOR (Both Versions)
+    // ============================================================
+
+    function generateChecksum(data) {
+      let hash = 0;
+      for (let i = 0; i < data.length; i++) {
+        const char = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16).padStart(8, '0');
+    }
+
+    // ============================================================
+    // CLIENT: GENERATE USER STRING
+    // ============================================================
+
+    function generateUserString() {
+      if (!currentUser) {
+        showToast('❌ Please create an account first', 'error');
+        return null;
+      }
+
+      const ref = document.getElementById('paymentRef');
+      if (!ref) {
+        showToast('❌ Payment reference field not found', 'error');
+        return null;
+      }
+
+      const refValue = ref.value.trim();
+      if (!refValue) {
+        showToast('❌ Enter your payment reference', 'error');
+        return null;
+      }
+
+      const pkg = PACKAGES[selectedPackage];
+
+      const userData = {
+        name: currentUser.name || 'Unknown',
+        contact: currentUser.whatsapp || 'Unknown',
+        ref: refValue,
+        package: pkg.name || 'Unknown',
+        userId: currentUser.id || 'Unknown',
+        amount: pkg.price || 0,
+        timestamp: new Date().toISOString()
+      };
+
+      const jsonString = JSON.stringify(userData);
+
+      let encoded;
+      try {
+        encoded = btoa(jsonString);
+      } catch (e) {
+        encoded = encodeURIComponent(jsonString);
+      }
+
+      const checksum = generateChecksum(jsonString);
+      const userString = encoded + '.' + checksum;
+
+      localStorage.setItem('lastUserString', userString);
+      localStorage.setItem('lastPaymentData', jsonString);
+
+      return userString;
+    }
+
+    // ============================================================
+    // CLIENT: PAYMENT CONFIRMATION + WHATSAPP REDIRECT
+    // ============================================================
+
+    function confirmPayment() {
+      if (!currentUser) {
+        showToast('❌ Please create an account first', 'error');
+        return;
+      }
+
+      if (currentUser.verified) {
+        document.getElementById('paymentStatus').textContent = '✅ Already verified!';
+        document.getElementById('paymentStatus').style.color = '#00cc44';
+        showToast('✅ Already verified!', 'success');
+        goToDashboard();
+        return;
+      }
+
+      const refInput = document.getElementById('paymentRef');
+      if (!refInput) {
+        showToast('❌ Payment reference field not found', 'error');
+        return;
+      }
+
+      const ref = refInput.value.trim();
+      if (!ref) {
+        document.getElementById('paymentStatus').textContent = '❌ Please enter your payment reference';
+        document.getElementById('paymentStatus').style.color = '#ff3333';
+        return;
+      }
+
+      const userString = generateUserString();
+      if (!userString) {
+        document.getElementById('paymentStatus').textContent = '❌ Failed to generate verification code';
+        document.getElementById('paymentStatus').style.color = '#ff3333';
+        return;
+      }
+
+      const pkg = PACKAGES[selectedPackage];
+
+      const adminPhone = '256700000000';
+
+      const message = `🦈 SHARPI PAYMENT VERIFICATION
+
+📋 My Code: ${userString}
+
+👤 Name: ${currentUser.name}
+📱 Contact: ${currentUser.whatsapp}
+🆔 User ID: ${currentUser.id}
+📦 Package: ${pkg.name}
+💰 Amount: $${pkg.price.toFixed(2)}
+📋 Ref: ${ref}
+
+✅ Please verify and send my access token.`;
+
+      const statusEl = document.getElementById('paymentStatus');
+      if (statusEl) {
+        statusEl.innerHTML = `
+          ✅ Payment recorded!<br>
+          <span style="font-size:11px; color:#888;">
+            📤 Opening WhatsApp to send your code...<br>
+            ⏳ Wait for admin to send your access token.
+          </span>
+        `;
+        statusEl.style.color = '#00cc44';
+      }
+
+      const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+
+      showToast('📤 WhatsApp opened! Send your code.', 'success');
+
+      appData.sales.push({
+        userId: currentUser.id,
+        userName: currentUser.name,
+        package: selectedPackage,
+        amount: pkg.price,
+        ref: ref,
+          promoCode: document.getElementById('promoCode').value.trim().toUpperCase() || null,
+        date: new Date().toISOString(),
+        status: 'pending',
+        userString: userString
+      });
+      saveData();
+
+      const pending = JSON.parse(localStorage.getItem('pendingPayments') || '[]');
+      pending.push({
+        userId: currentUser.id,
+        userName: currentUser.name,
+        userWhatsApp: currentUser.whatsapp,
+        package: selectedPackage,
+        amount: pkg.price,
+        ref: ref,
+        userString: userString,
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+      });
+      localStorage.setItem('pendingPayments', JSON.stringify(pending));
+    }
+
+    // ============================================================
+    // DECODE USER STRING (Admin Version)
+    // ============================================================
+
+    function decodeUserString(userString) {
+      try {
+        const parts = userString.split('.');
+        if (parts.length !== 2) {
+          return { valid: false, error: 'Invalid format. Expected: encoded.checksum' };
+        }
+
+        const encoded = parts[0];
+        const providedChecksum = parts[1];
+
+        let jsonString;
+        try {
+          jsonString = atob(encoded);
+        } catch (e) {
+          jsonString = decodeURIComponent(encoded);
+        }
+
+        let data;
+        try {
+          data = JSON.parse(jsonString);
+        } catch (e) {
+          return { valid: false, error: 'Invalid data format' };
+        }
+
+        const calculatedChecksum = generateChecksum(jsonString);
+        if (calculatedChecksum !== providedChecksum) {
+          return {
+            valid: false,
+            error: 'Checksum mismatch - data may be tampered or corrupted'
+          };
+        }
+
+        return {
+          valid: true,
+          data: data
+        };
+      } catch (e) {
+        return {
+          valid: false,
+          error: 'Decoding failed: ' + e.message
+        };
+      }
+    }
+
+    // ============================================================
+    // GENERATE ADMIN TOKEN
+    // ============================================================
+
+    function generateAdminToken(userId, name, contact) {
+      const timestamp = Date.now();
+      const random = Math.floor(Math.random() * 10000);
+
+      const namePart = name ? name.slice(0, 3).toUpperCase() : 'XXX';
+      const contactPart = contact ? contact.slice(-4) : '0000';
+      const raw = `${userId}-${namePart}-${contactPart}-${timestamp}-${random}`;
+
+      let encoded;
+      try {
+        encoded = btoa(raw);
+      } catch (e) {
+        encoded = encodeURIComponent(raw);
+      }
+
+      let token = encoded.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+
+      if (token.length < 16) {
+        token = token.padEnd(16, 'X');
+      } else if (token.length > 16) {
+        token = token.slice(0, 16);
+      }
+
+      const formatted = token.slice(0, 4) + '-' +
+                        token.slice(4, 8) + '-' +
+                        token.slice(8, 12) + '-' +
+                        token.slice(12, 16);
+
+      return formatted;
+    }
+
+    // ============================================================
+    // SIGNAL SIMULATION
+    // ============================================================
+
+
+    // ============================================================
+    // SEED KEY
+    // ============================================================
+
+    function setSeedKey() {
+      const input = document.getElementById('seedKey');
+      const val = input.value.trim().toUpperCase();
+
+      if (val.length === 15) {
+        seedKeyValue = val;
+        seedKeyValid = true;
+        document.getElementById('seedStatus').textContent = '✅ Seed key set: ' + val;
+        document.getElementById('seedStatus').className = 'seed-status valid';
+        showToast('✅ Seed key accepted!', 'success');
+      } else {
+        seedKeyValid = false;
+        document.getElementById('seedStatus').textContent = '❌ Must be exactly 15 characters';
+        document.getElementById('seedStatus').className = 'seed-status invalid';
+        showToast('❌ Seed key must be 15 characters', 'error');
+      }
+    }
+
+    document.getElementById('seedKey').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') setSeedKey();
+    });
+
+    // ============================================================
+    // MULTIPLIER GENERATION
+    // ============================================================
+    function generateMultiplier() {
+  // 70% chance of single digit (1-9), 30% chance of double digit (10-18)
+  const isSingle = Math.random() < 0.7;
+  
+  let base;
+  if (isSingle) {
+    base = Math.floor(Math.random() * 9) + 1; // 1-9
+  } else {
+    base = Math.floor(Math.random() * 9) + 10; // 10-18
+  }
+  
+  return base.toFixed(2);
+}
+    // ============================================================
+    // ACTION BUTTON
+    // ============================================================
+
+    function handleAction() {
+      if (isGenerating) return;
+
+      if (!seedKeyValid) {
+        showToast('❌ Enter a valid 15-character seed key first', 'error');
+        document.getElementById('seedKey').focus();
+        return;
+      }
+
+      if (!isSessionActive) {
+        isSessionActive = true;
+        roundCount = 0;
+        history = [];
+        historyFull = [];
+        document.getElementById('historyFull').classList.remove('open');
+        document.getElementById('showMoreBtn').style.display = 'none';
+        document.getElementById('actionBtn').textContent = 'NEXT ROUND';
+        document.getElementById('actionBtn').className = 'action-btn next-btn';
+        generateRound();
+      } else {
+        generateRound();
+      }
+    }
+
+    function generateRound() {
+  if (isGenerating) return;
+  isGenerating = true;
+  document.getElementById('actionBtn').disabled = true;
+
+  const circle = document.getElementById('circleDisplay');
+  circle.innerHTML = `
+    <div class="circle-inner" id="circleInner">
+      <div class="ghost-loader">
+        <div id="ghost">
+          <div id="red">
+            <div id="top0"></div><div id="top1"></div><div id="top2"></div>
+            <div id="top3"></div><div id="top4"></div>
+            <div id="st0"></div><div id="st1"></div><div id="st2"></div>
+            <div id="st3"></div><div id="st4"></div><div id="st5"></div>
+            <div id="an1"></div><div id="an2"></div><div id="an3"></div>
+            <div id="an4"></div><div id="an5"></div><div id="an6"></div>
+            <div id="an7"></div><div id="an8"></div><div id="an9"></div>
+            <div id="an10"></div><div id="an11"></div><div id="an12"></div>
+            <div id="an13"></div><div id="an14"></div><div id="an15"></div>
+            <div id="an16"></div><div id="an17"></div><div id="an18"></div>
+            <div id="eye"></div><div id="eye1"></div>
+            <div id="pupil"></div><div id="pupil1"></div>
+            <div id="shadow"></div>
+          </div>
+        </div>
+        <div class="loader-text">🔮 Calculating...</div>
+      </div>
+    </div>
+  `;
+
+  setTimeout(function() {
+    const mult = generateMultiplier();
+    multiplier = mult;
+    roundCount = roundCount + 1;
+
+    const entry = {
+      round: roundCount,
+      multiplier: mult,
+      time: new Date().toLocaleTimeString()
+    };
+    history.unshift(entry);
+    historyFull.unshift(entry);
+    if (history.length > 5) history.pop();
+
+    circle.innerHTML = `
+      <div class="circle-inner" id="circleInner">
+        <span class="multiplier-text" id="multiplierValue">${mult}x</span>
+      </div>
+    `;
+    document.getElementById('sessionText').textContent = 'Session: #' + String(roundCount).padStart(4, '0');
+    document.getElementById('roundDisplay').textContent = roundCount;
+
+    renderHistory();
+
+    isGenerating = false;
+    document.getElementById('actionBtn').disabled = false;
+
+    const messages = ['🎯 Prediction ready!', '📊 Check your result!', '💫 Next round!'];
+    showToast(messages[Math.floor(Math.random() * messages.length)], 'success');
+
+  }, 1500 + Math.random() * 1000);
+}    // ============================================================
+    // HISTORY
+    // ============================================================
+
+    function renderHistory() {
+  const list = document.getElementById('historyList');
+
+  if (history.length === 0) {
+    list.innerHTML = '<div style="color:#444; font-size:12px; text-align:center; padding:10px 0;">No predictions yet</div>';
+    document.getElementById('showMoreBtn').style.display = 'none';
+    return;
+  }
+
+  let html = '';
+  history.forEach(function(h, i) {
+    const opacity = 1 - (i * 0.15);
+    html = html + `
+      <div class="history-item" style="opacity:${Math.max(opacity, 0.4)};">
+        <span>#${h.round}</span>
+        <span class="h-mult">${h.multiplier}x</span>
+        <span class="h-time">${h.time}</span>
+      </div>
+    `;
+  });
+  list.innerHTML = html;
+
+  if (historyFull.length > 5) {
+    document.getElementById('showMoreBtn').style.display = 'block';
+  } else {
+    document.getElementById('showMoreBtn').style.display = 'none';
+  }
+}
+function toggleHistory() {
+  const full = document.getElementById('historyFull');
+  const btn = document.getElementById('showMoreBtn');
+
+  if (full.classList.contains('open')) {
+    full.classList.remove('open');
+    btn.textContent = 'Show more ▼';
+  } else {
+    full.classList.add('open');
+    btn.textContent = 'Show less ▲';
+
+    let html = '';
+    historyFull.forEach(function(h) {
+      html = html + `
+        <div class="history-item">
+          <span>#${h.round}</span>
+          <span class="h-mult">${h.multiplier}x</span>
+          <span class="h-time">${h.time}</span>
+        </div>
+      `;
+    });
+    full.innerHTML = html;
+  }
+}
+     function toggleMenu() {
+      showToast('📋 Custom values coming soon!', '');
+    }
+
+    function resetSession() {
+      if (isSessionActive) {
+        if (confirm('Reset session?')) {
+          isSessionActive = false;
+          multiplier = null;
+          roundCount = 0;
+          history = [];
+          historyFull = [];
+          document.getElementById('multiplierValue').textContent = '--';
+          document.getElementById('sessionText').textContent = 'Session: #----';
+          document.getElementById('actionBtn').textContent = 'GET SIGNALS';
+          document.getElementById('actionBtn').className = 'action-btn get-btn';
+          document.getElementById('historyList').innerHTML = '<div style="color:#444; font-size:12px; text-align:center; padding:10px 0;">No predictions yet</div>';
+          document.getElementById('showMoreBtn').style.display = 'none';
+          document.getElementById('historyFull').classList.remove('open');
+          document.getElementById('roundDisplay').textContent = '0';
+          showToast('🔄 Session reset', '');
+        }
+      }
+    }
+
+    // ============================================================
+    // IMAGE PLACEHOLDER UPDATE
+    // ============================================================
+
+    function updateImagePlaceholders(url1, url2) {
+      const img1 = document.getElementById('image1Placeholder');
+      const img2 = document.getElementById('image2Placeholder');
+      if (img1 && url1) {
+        img1.innerHTML = `<img src="${url1}" alt="Image 1" />`;
+      }
+      if (img2 && url2) {
+        img2.innerHTML = `<img src="${url2}" alt="Image 2" />`;
+      }
+    }
+
+    // ============================================================
+    // ADMIN TOGGLE
+    // ============================================================
+
+    function toggleAdmin() {
+      adminMode = !adminMode;
+      const container = document.getElementById('adminPanelContainer');
+      if (container) {
+        container.style.display = adminMode ? 'block' : 'none';
+      }
+    }
+
+    // ============================================================
+    // RESTORE USER SESSION
+    // ============================================================
+
+    function restoreUserSession() {
+      loadData();
+
+      if (appData.users.length > 0) {
+        const lastUser = appData.users[appData.users.length - 1];
+        currentUser = lastUser;
+
+        const accountPanel = document.getElementById('accountPanel');
+        if (accountPanel) {
+          accountPanel.style.display = 'none';
+        }
+
+        const userIdPanel = document.getElementById('userIdPanel');
+        if (userIdPanel) {
+          userIdPanel.style.display = 'block';
+          document.getElementById('userIdDisplay').textContent = currentUser.id;
+        }
+
+        const userBadge = document.getElementById('userBadge');
+        if (userBadge) {
+          userBadge.textContent = '👤 ' + currentUser.name;
+        }
+        if (currentUser) { listenForAdminDispatch(currentUser.id); }
+        if (currentUser.verified) {
+          goToDashboard();
+          return true;
+        } else {
+          showToast('💎 Welcome back, ' + currentUser.name + '! Verify payment to access predictions.', '');
+          return true;
+        }
+      }
+// Start listening for admin dispatch
+if (currentUser) {
+    listenForAdminDispatch(currentUser.id);
+}
+      showToast('🦈 Welcome to SHARPI Predictor!', '');
+      showPage('pageLanding');
+      return false;
+    }
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let currentUser = null;
+    let isSessionActive = false;
+    let multiplier = null;
+    let roundCount = 0;
+    let history = [];
+    let historyFull = [];
+    let signalInterval = null;
+    let isGenerating = false;
+    let selectedPackage = 'silver';
+    let seedKeyValid = false;
+    let seedKeyValue = '';
+
+    const PACKAGES = {
+      silver: { name: 'Silver', price: 9.99, features: '10 predictions/day • Basic signal' },
+      gold: { name: 'Gold', price: 19.99, features: 'Unlimited predictions • Custom values • Priority support' },
+      platinum: { name: 'Platinum', price: 49.99, features: 'Everything + VIP support • Early access • Exclusive signals' }
+    };
+// ============================================================
+// CONNECTION WARNING SYSTEM
+// ============================================================
+
+// Warning intervals in minutes: 1, 3, 6, 1, 3, 6 (repeating)
+ // ============================================================
+// CONNECTION WARNING SYSTEM (Random Timing)
+// ============================================================
+
+let warningTimer = null;
+let warningTimeout = null;
+let warningVisible = false;
+let isWarningSystemActive = false;
+
+function showConnectionWarning() {
+  const warningEl = document.getElementById('connectionWarning');
+  if (!warningEl) return;
+
+  // Show the warning
+  warningEl.style.display = 'flex';
+  warningVisible = true;
+
+  // Auto-hide after 2 seconds
+  clearTimeout(warningTimeout);
+  warningTimeout = setTimeout(function() {
+    warningEl.style.display = 'none';
+    warningVisible = false;
+
+    // Schedule next random warning
+    if (isWarningSystemActive) {
+      scheduleRandomWarning();
+    }
+  }, 8000);
+}
+
+function scheduleRandomWarning() {
+  if (!isWarningSystemActive) return;
+
+  // Generate random time between 10 seconds and 90 seconds
+  // This ensures warnings appear randomly within each minute
+  const minDelay = 11111;  // 10 seconds minimum
+  const maxDelay = 33333;  // 90 seconds maximum
+  const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+  // Clear any existing timer
+  clearTimeout(warningTimer);
+
+  // Set the timer for the next random warning
+  warningTimer = setTimeout(function() {
+    if (isWarningSystemActive) {
+      showConnectionWarning();
+    }
+  }, randomDelay);
+
+  console.log('⏰ Next connection warning in ' + Math.round(randomDelay / 1000) + ' seconds');
+}
+
+function startConnectionWarnings() {
+  // Set system as active
+  isWarningSystemActive = true;
+
+  // Clear any existing timers
+  clearTimeout(warningTimer);
+  clearTimeout(warningTimeout);
+
+  // Hide warning if visible
+  const warningEl = document.getElementById('connectionWarning');
+  if (warningEl) {
+    warningEl.style.display = 'none';
+  }
+  warningVisible = false;
+
+  // Schedule first random warning
+  scheduleRandomWarning();
+
+  console.log('⏰ Connection warning system started (random timing)');
+}
+
+function stopConnectionWarnings() {
+  isWarningSystemActive = false;
+  clearTimeout(warningTimer);
+  clearTimeout(warningTimeout);
+  
+  const warningEl = document.getElementById('connectionWarning');
+  if (warningEl) {
+    warningEl.style.display = 'none';
+  }
+  warningVisible = false;
+  console.log('⏰ Connection warning system stopped.');
+}
+
+function checkAndStartWarnings() {
+  const dashboard = document.getElementById('pageDashboard');
+  if (dashboard && dashboard.classList.contains('active')) {
+    startConnectionWarnings();
+  } else {
+    setTimeout(checkAndStartWarnings, 1000);
+  }
+}
+
+// Start the warning system when the app loads
+setTimeout(checkAndStartWarnings, 3000);
+
+// Also start when user navigates to dashboard
+const originalGoToDashboard = goToDashboard;
+goToDashboard = function() {
+  originalGoToDashboard();
+  setTimeout(startConnectionWarnings, 2000);
+};
+
+// Stop warnings when leaving dashboard
+const originalGoToLanding = goToLanding;
+goToLanding = function() {
+  stopConnectionWarnings();
+  originalGoToLanding();
+};  // INIT
+    // ============================================================
+
+    console.log('🦈 SHARPI Predictor loaded');
+    console.log('📊 Data:', appData);
+
+    restoreUserSession();
+// ============================================================
+// REVIEWS SHOW MORE
+// ============================================================
+
+function toggleReviews() {
+  const hidden = document.getElementById('hiddenReviews');
+  const btn = document.getElementById('showMoreReviews');
+
+  if (hidden.style.display === 'none') {
+    hidden.style.display = 'block';
+    btn.textContent = 'Show less ▲';
+  } else {
+    hidden.style.display = 'none';
+    btn.textContent = 'Show more ▼';
+  }
+}
+    console.log('✅ Ready!');
+
+  </script>
+</body>
+</html>
